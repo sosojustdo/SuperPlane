@@ -18,7 +18,7 @@ import com.hurteng.stormplane.sounds.GameSoundPool;
  */
 @SuppressLint("ViewConstructor")
 public class ReadyView extends BaseView {
-    private float fly_x;                    // ͼƬ������
+    private float fly_x;
     private float fly_y;
     private float fly_height;
     private float text_x;

@@ -16,6 +16,7 @@ public class BaseView extends SurfaceView implements SurfaceHolder.Callback, Run
     protected float scaley;
     protected float screen_width;
     protected float screen_height;
+    //线程运行标示位
     protected boolean threadFlag;
     protected Paint paint;
     protected Canvas canvas;

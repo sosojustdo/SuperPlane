@@ -9,8 +9,9 @@ package com.hurteng.stormplane.constant;
 public interface GameConstant {
 
 	//初始相关
-	int LIFEAMOUNT = 5;// 初始生命值
+	int LIFEAMOUNT = 2;// 初始生命值
 	int MISSILECOUNT = 5;// 初始导弹数
+	//TODO 修改生命最大值
 	int LIFE_MAXCOUNT = 9;// 生命最大值
 	int MISSILE_MAXCOUNT = 9;// 导弹最大存有量
 	int GAMESPEED = 1;// 游戏初始速度倍率

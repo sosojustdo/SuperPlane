@@ -6,9 +6,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.media.MediaPlayer;
+import android.os.CountDownTimer;
 import android.os.Message;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
+import android.view.View;
 
 import com.hurteng.stormplane.constant.ConstantUtil;
 import com.hurteng.stormplane.constant.DebugConstant;
@@ -30,6 +33,10 @@ import com.hurteng.stormplane.sounds.GameSoundPool;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import razerdp.basepopup.QuickPopupBuilder;
+import razerdp.basepopup.QuickPopupConfig;
+import razerdp.widget.QuickPopup;
 
 /**
  * 游戏进行的主界面
@@ -580,6 +587,7 @@ public class MainView extends BaseView {
 				if (mLifeAmount > 0) {
 					mLifeAmount--;
 					myPlane.setAlive(true);
+					//TODO 线程池优化
 					new Thread(new Runnable() {
 
 						@Override
@@ -590,8 +598,8 @@ public class MainView extends BaseView {
 							myPlane.setInvincibleTime(GameConstant.INVINCIBLE_TIME);
 						}
 					}).start();
-
 				} else {
+					//TODO 生命值结束看广告
 					if (DebugConstant.ETERNAL) {
 						// 设置不死亡，供游戏测试使用
 						threadFlag = true;
@@ -611,19 +619,51 @@ public class MainView extends BaseView {
 
 					} else {
 						// 正常情况，游戏结束,并停止音乐
-						threadFlag = false;
+						final QuickPopup quickPopup = QuickPopupBuilder.with(mainActivity).contentView(R.layout.popupwindow_message)
+							    .config(new QuickPopupConfig().withClick(R.id.resurrection, new View.OnClickListener(){
+								@Override
+								public void onClick(View v) {
+									//init ads
+
+									//恢复生命值
+									mLifeAmount = GameConstant.LIFEAMOUNT;
+									//设置飞机生存状态
+									myPlane.setAlive(true);
+									//设置后台线程以及游戏运行状态
+									threadFlag = true;
+									if (isPlay) {
+										isPlay = false;
+									} else {
+										isPlay = true;
+										synchronized (thread) {
+											thread.notify();
+										}
+									}
+
+								}
+							}, true)).build();
+
+						isPlay = false;
+						//设置是否允许点击BasePopup外部时触发dismiss
+						quickPopup.setOutSideDismiss(false);
+						//设置BasePopup是否允许返回键dismiss
+						quickPopup.setBackPressEnable(false);
+						//倒计时退出执行监听器，返回重新开始游戏画面
+						//quickPopup.setOnDismissListener()
+
+						//展示PopupWindow
+						quickPopup.showPopupWindow();
+
+						threadFlag = true;
 						if (mMediaPlayer.isPlaying()) {
 							mMediaPlayer.stop();
 						}
 					}
-
 				}
-
 			}
 			myPlane.drawSelf(canvas); // 绘制玩家的飞机
 			myPlane.shoot(canvas, enemyPlanes);
 			sounds.playSound(1, 0); // 子弹音效
-
 		} catch (Exception err) {
 			err.printStackTrace();
 		} finally {

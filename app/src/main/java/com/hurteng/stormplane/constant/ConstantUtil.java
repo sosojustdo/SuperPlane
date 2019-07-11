@@ -11,6 +11,9 @@ public interface ConstantUtil {
     int TO_MAIN_VIEW = 7;
     int TO_END_VIEW = 8;
     int END_GAME = 9;
+    int RESURRECTION_COUNT = 10;
+    int DELAY_SEND_DURATION = 1000;
+    int INIT_COUNT_TIMER = 5000;
 
     int DIR_UP = 10;
     int DIR_DOWN = 11;

@@ -39,6 +39,10 @@ public class BaseView extends SurfaceView implements SurfaceHolder.Callback, Run
         paint = new Paint();
     }
 
+    public MainActivity getMainActivity() {
+        return mainActivity;
+    }
+
     @Override
     public void surfaceChanged(SurfaceHolder arg0, int arg1, int arg2, int arg3) {
 

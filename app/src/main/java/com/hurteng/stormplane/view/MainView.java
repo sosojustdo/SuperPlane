@@ -6,23 +6,26 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.media.MediaPlayer;
-import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
-import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.View;
+import android.widget.TextView;
 
 import com.hurteng.stormplane.constant.ConstantUtil;
 import com.hurteng.stormplane.constant.DebugConstant;
 import com.hurteng.stormplane.constant.GameConstant;
 import com.hurteng.stormplane.factory.GameObjectFactory;
+import com.hurteng.stormplane.handler.CountDownHandler;
+import com.hurteng.stormplane.handler.CountDownHandlerObject;
 import com.hurteng.stormplane.myplane.R;
-import com.hurteng.stormplane.object.RedBulletGoods;
 import com.hurteng.stormplane.object.GameObject;
 import com.hurteng.stormplane.object.LifeGoods;
 import com.hurteng.stormplane.object.MissileGoods;
 import com.hurteng.stormplane.object.PurpleBulletGoods;
+import com.hurteng.stormplane.object.RedBulletGoods;
 import com.hurteng.stormplane.plane.BigPlane;
 import com.hurteng.stormplane.plane.BossPlane;
 import com.hurteng.stormplane.plane.EnemyPlane;
@@ -76,6 +79,10 @@ public class MainView extends BaseView {
 	private LifeGoods lifeGoods; // 生命物品
 	private PurpleBulletGoods purpleBulletGoods;
 	private RedBulletGoods redBulletGoods; // 子弹2
+	private TextView countView; //倒计时textview
+	private CountDownHandler mCountDownHandler;//处理倒计时Handler
+	private int initTimer = ConstantUtil.INIT_COUNT_TIMER;//倒计时5秒
+
 
 	private int mLifeAmount;// 生命总数
 	private GameObjectFactory factory;
@@ -84,7 +91,15 @@ public class MainView extends BaseView {
 	private List<BigPlane> bigPlanes;// 大型机集合,用于实现子弹的遍历
 	
 	private int bossAppearAgain_score;//boss重新出现需要的积分
-	
+
+	public TextView getCountView() {
+		return countView;
+	}
+
+	public int getSumScore() {
+		return sumScore;
+	}
+
 	public MainView(Context context, GameSoundPool sounds) {
 		super(context, sounds);
 		isPlay = true;
@@ -105,6 +120,7 @@ public class MainView extends BaseView {
 		enemyPlanes = new ArrayList<EnemyPlane>();// 敌机集合
 		myPlane = (MyPlane) factory.createMyPlane(getResources());// 生产玩家的飞机
 		myPlane.setMainView(this);
+		mCountDownHandler = new CountDownHandler(this);
 
 		for (int i = 0; i < SmallPlane.sumCount; i++) {
 			// 生产小型敌机
@@ -625,6 +641,9 @@ public class MainView extends BaseView {
 								public void onClick(View v) {
 									//init ads
 
+									//复活计数重新初始化
+									initTimer = ConstantUtil.INIT_COUNT_TIMER;
+
 									//恢复生命值
 									mLifeAmount = GameConstant.LIFEAMOUNT;
 									//设置飞机生存状态
@@ -648,11 +667,19 @@ public class MainView extends BaseView {
 						quickPopup.setOutSideDismiss(false);
 						//设置BasePopup是否允许返回键dismiss
 						quickPopup.setBackPressEnable(false);
-						//倒计时退出执行监听器，返回重新开始游戏画面
-						//quickPopup.setOnDismissListener()
+
+						countView = quickPopup.getContentView().findViewById(R.id.timer);
 
 						//展示PopupWindow
 						quickPopup.showPopupWindow();
+
+						Message message = mCountDownHandler.obtainMessage();
+						message.arg1 = 0;
+						message.arg2 = 1;
+						message.what = ConstantUtil.RESURRECTION_COUNT;
+						CountDownHandlerObject object = new CountDownHandlerObject(initTimer, quickPopup);
+						message.obj = object;
+						mCountDownHandler.sendMessageDelayed(message, ConstantUtil.DELAY_SEND_DURATION);
 
 						threadFlag = true;
 						if (mMediaPlayer.isPlaying()) {
@@ -698,7 +725,6 @@ public class MainView extends BaseView {
 		bulletScore += score; // 子弹的积分
 		bulletScore2 += score; // 子弹的积分
 		sumScore += score; // 游戏总得分
-		
 	}
 
 	// 播放音效

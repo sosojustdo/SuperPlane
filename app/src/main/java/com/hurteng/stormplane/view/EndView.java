@@ -52,7 +52,7 @@ public class EndView extends BaseView {
         super.surfaceCreated(arg0);
         initBitmap();
         if (thread.isAlive()) {
-            thread.start();
+            //thread.start();
         } else {
             thread = new Thread(this);
             thread.start();

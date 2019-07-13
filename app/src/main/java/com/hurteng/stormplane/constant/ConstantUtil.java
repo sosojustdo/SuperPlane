@@ -13,10 +13,11 @@ public interface ConstantUtil {
     int END_GAME = 9;
     int RESURRECTION_COUNT = 10;
     int RUNNING_GAME = 11;
+    int POPUP_DISMISS = 12;
 
 
     int DELAY_SEND_DURATION = 1000;
-    int INIT_COUNT_TIMER = 5000;
+    int INIT_COUNT_TIMER = 10000;
 
     int DIR_UP = 10;
     int DIR_DOWN = 11;

@@ -6,8 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.media.MediaPlayer;
-import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -82,6 +80,7 @@ public class MainView extends BaseView {
 	private TextView countView; //倒计时textview
 	private CountDownHandler mCountDownHandler;//处理倒计时Handler
 	private int initTimer = ConstantUtil.INIT_COUNT_TIMER;//倒计时5秒
+    private volatile QuickPopup quickPopup;
 
 
 	private int mLifeAmount;// 生命总数
@@ -100,9 +99,13 @@ public class MainView extends BaseView {
 		return sumScore;
 	}
 
-	public MainView(Context context, GameSoundPool sounds) {
+    public QuickPopup getQuickPopup() {
+        return quickPopup;
+    }
+
+    public MainView(Context context, GameSoundPool sounds) {
 		super(context, sounds);
-		isPlay = true;
+        isPlay = true;
 		
 		speedTime = GameConstant.GAMESPEED;
 		mLifeAmount = GameConstant.LIFEAMOUNT;// 初始生命值
@@ -634,8 +637,9 @@ public class MainView extends BaseView {
 						}).start();
 
 					} else {
+                        myPlane.setAlive(true);
 						// 正常情况，游戏结束,并停止音乐
-						final QuickPopup quickPopup = QuickPopupBuilder.with(mainActivity).contentView(R.layout.popupwindow_message)
+						quickPopup = QuickPopupBuilder.with(mainActivity).contentView(R.layout.popupwindow_message)
 							    .config(new QuickPopupConfig().withClick(R.id.resurrection, new View.OnClickListener(){
 								@Override
 								public void onClick(View v) {
@@ -646,23 +650,66 @@ public class MainView extends BaseView {
 
 									//恢复生命值
 									mLifeAmount = GameConstant.LIFEAMOUNT;
-									//设置飞机生存状态
-									myPlane.setAlive(true);
-									//设置后台线程以及游戏运行状态
-									threadFlag = true;
-									if (isPlay) {
-										isPlay = false;
-									} else {
-										isPlay = true;
-										synchronized (thread) {
-											thread.notify();
-										}
-									}
 
+                                    //设置quickPopup handler事件
+                                    Message message = mCountDownHandler.obtainMessage();
+                                    message.arg1 = 0;
+                                    message.arg2 = 1;
+                                    message.what = ConstantUtil.POPUP_DISMISS;
+                                    message.obj = quickPopup;
+                                    mCountDownHandler.sendMessage(message);
+
+									//移除倒计时handler
+                                    mCountDownHandler.removeMessages(ConstantUtil.RESURRECTION_COUNT);
+
+									//设置游戏运行状态为运行状态
+                                    myPlane.setAlive(true);
+									isPlay = true;
+									mMediaPlayer.start();
+									synchronized (thread) {
+										thread.notify();
+									}
 								}
 							}, true)).build();
 
+                        /**
+                        TextView resurrectionView = countView = quickPopup.getContentView().findViewById(R.id.resurrection);
+                        resurrectionView.setOnClickListener(new OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                //init ads
+
+                                //复活计数重新初始化
+                                initTimer = ConstantUtil.INIT_COUNT_TIMER;
+
+                                //恢复生命值
+                                mLifeAmount = GameConstant.LIFEAMOUNT;
+
+                                //设置quickPopup handler事件
+                                Message message = mCountDownHandler.obtainMessage();
+                                message.arg1 = 4;
+                                message.arg2 = 5;
+                                message.what = ConstantUtil.POPUP_DISMISS;
+                                message.obj = quickPopup;
+                                mCountDownHandler.sendMessage(message);
+
+                                //移除倒计时handler
+                                mCountDownHandler.removeMessages(ConstantUtil.RESURRECTION_COUNT);
+
+                                //设置游戏运行状态为运行状态
+                                myPlane.setAlive(true);
+                                isPlay = true;
+                                mMediaPlayer.start();
+                                synchronized (thread) {
+                                    thread.notify();
+                                }
+                            }
+                        });**/
+
+						//暂停游戏
 						isPlay = false;
+						mMediaPlayer.pause();
+
 						//设置是否允许点击BasePopup外部时触发dismiss
 						quickPopup.setOutSideDismiss(false);
 						//设置BasePopup是否允许返回键dismiss
@@ -673,6 +720,7 @@ public class MainView extends BaseView {
 						//展示PopupWindow
 						quickPopup.showPopupWindow();
 
+						//设置倒计时handler
 						Message message = mCountDownHandler.obtainMessage();
 						message.arg1 = 0;
 						message.arg2 = 1;
@@ -739,16 +787,12 @@ public class MainView extends BaseView {
 			long startTime = System.currentTimeMillis();
 
 			Message message = mCountDownHandler.obtainMessage();
-			message.arg1 = 0;
-			message.arg2 = 1;
+			message.arg1 = 2;
+			message.arg2 = 3;
 			message.what = ConstantUtil.RUNNING_GAME;
 			mCountDownHandler.sendMessage(message);
 
-			//initObject();
-			//drawSelf();
-			//viewLogic(); // 背景移动的逻辑
 			long endTime = System.currentTimeMillis();
-
 			if (!isPlay) {
 				mMediaPlayer.pause();// 音乐暂停
 

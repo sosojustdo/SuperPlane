@@ -4,7 +4,6 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:background="@android:color/holo_blue_dark"
     android:orientation="vertical">
 
     <TextView
@@ -12,21 +11,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:background="@android:color/holo_red_dark"
         android:padding="16dp"
-        android:text="复活"/>
+        android:text="复活" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="30px">
+        android:layout_marginTop="30px"
+        android:background="@android:color/holo_green_dark">
 
         <TextView
             android:id="@+id/timer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
             android:layout_gravity="center"
-            android:padding="16dp"
-            android:text="timer" />
+            android:text="123" />
     </RelativeLayout>
 
 </LinearLayout>

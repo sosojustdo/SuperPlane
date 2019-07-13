@@ -737,9 +737,16 @@ public class MainView extends BaseView {
 	public void run() {
 		while (threadFlag) {
 			long startTime = System.currentTimeMillis();
-			initObject();
-			drawSelf();
-			viewLogic(); // 背景移动的逻辑
+
+			Message message = mCountDownHandler.obtainMessage();
+			message.arg1 = 0;
+			message.arg2 = 1;
+			message.what = ConstantUtil.RUNNING_GAME;
+			mCountDownHandler.sendMessage(message);
+
+			//initObject();
+			//drawSelf();
+			//viewLogic(); // 背景移动的逻辑
 			long endTime = System.currentTimeMillis();
 
 			if (!isPlay) {

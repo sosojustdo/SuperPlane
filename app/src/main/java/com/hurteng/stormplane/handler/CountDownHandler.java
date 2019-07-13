@@ -44,11 +44,21 @@ public class CountDownHandler extends Handler {
                     quickPopup.dismiss();
 
                     //返回游戏重新开始
+                    //TODO 上一次的积分和等级需要保持
                     Message message = new Message();
                     message.what = ConstantUtil.TO_END_VIEW;
                     message.arg1 = Integer.valueOf(mainView.getSumScore());
                     mainView.getMainActivity().getHandler().sendMessage(message);
                 }
+                break;
+            case ConstantUtil.RUNNING_GAME:
+                msg = Message.obtain();
+                msg.arg1 = 0;
+                msg.arg2 = 1;
+                msg.what = ConstantUtil.RUNNING_GAME;
+                mainView.initObject();
+                mainView.drawSelf();
+                mainView.viewLogic();
                 break;
         }
     }

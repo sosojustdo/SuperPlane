@@ -66,11 +66,7 @@ public class CountDownHandler extends Handler {
                 msg.arg2 = 5;
                 msg.what = ConstantUtil.POPUP_DISMISS;
                 QuickPopup quickPopup1 = (QuickPopup) msg.obj;
-                for(int i=1; i<=2; i++){
-                    quickPopup1.dismiss();
-                }
-                break;
-
+                quickPopup1.dismiss();
         }
     }
 

@@ -17,7 +17,7 @@ public interface ConstantUtil {
 
 
     int DELAY_SEND_DURATION = 1000;
-    int INIT_COUNT_TIMER = 10000;
+    int INIT_COUNT_TIMER = 5000;
 
     int DIR_UP = 10;
     int DIR_DOWN = 11;

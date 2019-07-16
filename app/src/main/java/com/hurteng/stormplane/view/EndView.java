@@ -27,8 +27,8 @@ public class EndView extends BaseView {
     private float strhei;
     private boolean isBtChange;
     private boolean isBtChange2;
-    private String startGame = "重新开始";
-    private String exitGame = "退出游戏";
+    private String startGame = getContext().getString(R.string.restart_game);
+    private String exitGame = getContext().getString(R.string.quit_game);
     private Bitmap button;
     private Bitmap button2;
     private Bitmap background;
@@ -171,7 +171,7 @@ public class EndView extends BaseView {
             canvas.drawText(exitGame, screen_width / 2 - strwid / 2, button_y2 + button.getHeight() / 2 + strhei / 2, paint);
             paint.setTextSize(60);
             float textlong = paint.measureText("总分:" + String.valueOf(score));
-            canvas.drawText("总分:" + String.valueOf(score), screen_width / 2 - textlong / 2, screen_height / 2 - 100, paint);
+            canvas.drawText(getContext().getString(R.string.total_score) + ":" + String.valueOf(score), screen_width / 2 - textlong / 2, screen_height / 2 - 100, paint);
         } catch (Exception err) {
             err.printStackTrace();
         } finally {

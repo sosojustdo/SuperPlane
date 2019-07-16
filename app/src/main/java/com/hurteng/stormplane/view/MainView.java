@@ -494,10 +494,10 @@ public class MainView extends BaseView {
 			// 绘制积分文字
 			paint.setTextSize(40);
 			paint.setColor(Color.rgb(235, 161, 1));
-			canvas.drawText("积分:" + String.valueOf(sumScore), 30 + play_bt_w,
+			canvas.drawText(getContext().getString(R.string.game_integral)+ ": " + String.valueOf(sumScore), 30 + play_bt_w,
 					50, paint);
 			// 绘制等级
-			canvas.drawText("等级 X " + String.valueOf(speedTime),
+			canvas.drawText(getContext().getString(R.string.game_level) + " X " + String.valueOf(speedTime),
 					screen_width - 160, 50, paint);
 			// 绘制生命数值
 			if (mLifeAmount > 0) {

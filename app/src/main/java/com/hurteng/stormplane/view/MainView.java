@@ -501,7 +501,7 @@ public class MainView extends BaseView {
 					screen_width - 160, 50, paint);
 			// 绘制生命数值
 			if (mLifeAmount > 0) {
-				paint.setColor(Color.BLACK);
+				paint.setColor(Color.rgb(235, 161, 1));
 				canvas.drawBitmap(life_amount, screen_width - 150,
 						screen_height - life_amount.getHeight() - 10, paint);
 				canvas.drawText("X " + String.valueOf(mLifeAmount),
@@ -530,7 +530,7 @@ public class MainView extends BaseView {
 			// 绘制导弹按钮
 			if (missileCount > 0) {
 				paint.setTextSize(40);
-				paint.setColor(Color.BLACK);
+				paint.setColor(Color.rgb(235, 161, 1));
 				canvas.drawBitmap(missile_bt, 10, missile_bt_y, paint);
 				canvas.drawText("X " + String.valueOf(missileCount),
 						10 + missile_bt.getWidth(), screen_height - 25, paint);// 绘制文字
@@ -671,40 +671,6 @@ public class MainView extends BaseView {
 									}
 								}
 							}, true)).build();
-
-                        /**
-                        TextView resurrectionView = countView = quickPopup.getContentView().findViewById(R.id.resurrection);
-                        resurrectionView.setOnClickListener(new OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                //init ads
-
-                                //复活计数重新初始化
-                                initTimer = ConstantUtil.INIT_COUNT_TIMER;
-
-                                //恢复生命值
-                                mLifeAmount = GameConstant.LIFEAMOUNT;
-
-                                //设置quickPopup handler事件
-                                Message message = mCountDownHandler.obtainMessage();
-                                message.arg1 = 4;
-                                message.arg2 = 5;
-                                message.what = ConstantUtil.POPUP_DISMISS;
-                                message.obj = quickPopup;
-                                mCountDownHandler.sendMessage(message);
-
-                                //移除倒计时handler
-                                mCountDownHandler.removeMessages(ConstantUtil.RESURRECTION_COUNT);
-
-                                //设置游戏运行状态为运行状态
-                                myPlane.setAlive(true);
-                                isPlay = true;
-                                mMediaPlayer.start();
-                                synchronized (thread) {
-                                    thread.notify();
-                                }
-                            }
-                        });**/
 
 						//暂停游戏
 						isPlay = false;

@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Message;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.View;
@@ -39,11 +40,18 @@ import razerdp.basepopup.QuickPopupBuilder;
 import razerdp.basepopup.QuickPopupConfig;
 import razerdp.widget.QuickPopup;
 
+import com.facebook.ads.*;
+
 /**
  * 游戏进行的主界面
  */
 @SuppressLint("ViewConstructor")
 public class MainView extends BaseView {
+
+	private final String TAG = MainView.class.getSimpleName();
+
+	private RewardedVideoAd rewardedVideoAd;//facebook激励视频
+
 	private int missileCount; // 导弹的数量
 	private int middlePlaneScore; // 中型敌机的积分
 	private int bigPlaneScore; // 大型敌机的积分
@@ -190,6 +198,9 @@ public class MainView extends BaseView {
 			thread = new Thread(this);
 			thread.start();
 		}
+
+		//onstruct RewardedVideoAd Object
+		rewardedVideoAd = new RewardedVideoAd(this.getContext(), "YOUR_PLACEMENT_ID");
 	}
 
 	// 视图销毁的方法
@@ -640,35 +651,68 @@ public class MainView extends BaseView {
                         myPlane.setAlive(true);
 						// 正常情况，游戏结束,并停止音乐
 						quickPopup = QuickPopupBuilder.with(mainActivity).contentView(R.layout.popupwindow_message)
-							    .config(new QuickPopupConfig().withClick(R.id.resurrection, new View.OnClickListener(){
+								.config(new QuickPopupConfig().withClick(R.id.resurrection, new View.OnClickListener(){
 								@Override
 								public void onClick(View v) {
-									//init ads
+								//init ads
+								rewardedVideoAd.setAdListener(new RewardedVideoAdListener() {
+									@Override
+									public void onRewardedVideoCompleted() {
+										Log.d(TAG, "Rewarded video completed!");
 
-									//复活计数重新初始化
-									initTimer = ConstantUtil.INIT_COUNT_TIMER;
+										//复活计数重新初始化
+										initTimer = ConstantUtil.INIT_COUNT_TIMER;
 
-									//恢复生命值
-									mLifeAmount = GameConstant.LIFEAMOUNT;
+										//恢复生命值
+										mLifeAmount = GameConstant.LIFEAMOUNT;
 
-                                    //设置quickPopup handler事件
-                                    Message message = mCountDownHandler.obtainMessage();
-                                    message.arg1 = 0;
-                                    message.arg2 = 1;
-                                    message.what = ConstantUtil.POPUP_DISMISS;
-                                    message.obj = quickPopup;
-                                    mCountDownHandler.sendMessage(message);
+										//设置quickPopup handler事件
+										Message message = mCountDownHandler.obtainMessage();
+										message.arg1 = 0;
+										message.arg2 = 1;
+										message.what = ConstantUtil.POPUP_DISMISS;
+										message.obj = quickPopup;
+										mCountDownHandler.sendMessage(message);
 
-									//移除倒计时handler
-                                    mCountDownHandler.removeMessages(ConstantUtil.RESURRECTION_COUNT);
+										//移除倒计时handler
+										mCountDownHandler.removeMessages(ConstantUtil.RESURRECTION_COUNT);
 
-									//设置游戏运行状态为运行状态
-                                    myPlane.setAlive(true);
-									isPlay = true;
-									mMediaPlayer.start();
-									synchronized (thread) {
-										thread.notify();
+										//设置游戏运行状态为运行状态
+										myPlane.setAlive(true);
+										isPlay = true;
+										mMediaPlayer.start();
+										synchronized (thread) {
+											thread.notify();
+										}
 									}
+
+									@Override
+									public void onError(Ad ad, AdError adError) {
+										Log.e(TAG, "Rewarded video ad failed to load: " + adError.getErrorMessage());
+									}
+
+									@Override
+									public void onAdLoaded(Ad ad) {
+										Log.d(TAG, "Rewarded video ad is loaded and ready to be displayed!");
+										rewardedVideoAd.show();
+									}
+
+									@Override
+									public void onAdClicked(Ad ad) {
+										Log.d(TAG, "Rewarded video ad clicked!");
+									}
+
+									@Override
+									public void onLoggingImpression(Ad ad) {
+										Log.d(TAG, "Rewarded video ad impression logged!");
+									}
+
+									@Override
+									public void onRewardedVideoClosed() {
+										Log.d(TAG, "Rewarded video ad closed!");
+									}
+								});
+								rewardedVideoAd.loadAd();
 								}
 							}, true)).build();
 

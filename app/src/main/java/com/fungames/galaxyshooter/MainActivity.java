@@ -49,7 +49,6 @@ public class  MainActivity extends Activity {
 
         readyView = new ReadyView(this, sounds);
         setContentView(readyView);
-
     }
 
     /**

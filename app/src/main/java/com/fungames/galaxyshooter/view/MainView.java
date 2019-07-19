@@ -200,7 +200,7 @@ public class MainView extends BaseView {
 		}
 
 		//onstruct RewardedVideoAd Object
-		rewardedVideoAd = new RewardedVideoAd(this.getContext(), "YOUR_PLACEMENT_ID");
+		rewardedVideoAd = new RewardedVideoAd(this.getContext(), "636703710139914_636706510139634");
 	}
 
 	// 视图销毁的方法

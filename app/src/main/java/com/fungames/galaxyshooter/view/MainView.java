@@ -654,6 +654,17 @@ public class MainView extends BaseView {
 								.config(new QuickPopupConfig().withClick(R.id.resurrection, new View.OnClickListener(){
 								@Override
 								public void onClick(View v) {
+								//设置quickPopup handler事件
+								Message message = mCountDownHandler.obtainMessage();
+								message.arg1 = 0;
+								message.arg2 = 1;
+								message.what = ConstantUtil.POPUP_DISMISS;
+								message.obj = quickPopup;
+								mCountDownHandler.sendMessage(message);
+
+								//移除倒计时handler
+								mCountDownHandler.removeMessages(ConstantUtil.RESURRECTION_COUNT);
+
 								//init ads
 								rewardedVideoAd.setAdListener(new RewardedVideoAdListener() {
 									@Override
@@ -665,17 +676,6 @@ public class MainView extends BaseView {
 
 										//恢复生命值
 										mLifeAmount = GameConstant.LIFEAMOUNT;
-
-										//设置quickPopup handler事件
-										Message message = mCountDownHandler.obtainMessage();
-										message.arg1 = 0;
-										message.arg2 = 1;
-										message.what = ConstantUtil.POPUP_DISMISS;
-										message.obj = quickPopup;
-										mCountDownHandler.sendMessage(message);
-
-										//移除倒计时handler
-										mCountDownHandler.removeMessages(ConstantUtil.RESURRECTION_COUNT);
 
 										//设置游戏运行状态为运行状态
 										myPlane.setAlive(true);

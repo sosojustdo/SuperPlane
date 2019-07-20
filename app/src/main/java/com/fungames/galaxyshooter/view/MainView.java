@@ -88,7 +88,7 @@ public class MainView extends BaseView {
 	private TextView countView; //倒计时textview
 	private CountDownHandler mCountDownHandler;//处理倒计时Handler
 	private int initTimer = ConstantUtil.INIT_COUNT_TIMER;//倒计时5秒
-    private volatile QuickPopup quickPopup;
+    private QuickPopup quickPopup;
 
 
 	private int mLifeAmount;// 生命总数
@@ -207,6 +207,10 @@ public class MainView extends BaseView {
 	@Override
 	public void surfaceDestroyed(SurfaceHolder arg0) {
 		super.surfaceDestroyed(arg0);
+		if (rewardedVideoAd != null) {
+			rewardedVideoAd.destroy();
+			rewardedVideoAd = null;
+		}
 		release();// 释放资源
 		mMediaPlayer.stop();
 	}
@@ -670,20 +674,6 @@ public class MainView extends BaseView {
 									@Override
 									public void onRewardedVideoCompleted() {
 										Log.d(TAG, "Rewarded video completed!");
-
-										//复活计数重新初始化
-										initTimer = ConstantUtil.INIT_COUNT_TIMER;
-
-										//恢复生命值
-										mLifeAmount = GameConstant.LIFEAMOUNT;
-
-										//设置游戏运行状态为运行状态
-										myPlane.setAlive(true);
-										isPlay = true;
-										mMediaPlayer.start();
-										synchronized (thread) {
-											thread.notify();
-										}
 									}
 
 									@Override
@@ -710,6 +700,19 @@ public class MainView extends BaseView {
 									@Override
 									public void onRewardedVideoClosed() {
 										Log.d(TAG, "Rewarded video ad closed!");
+										//复活计数重新初始化
+										initTimer = ConstantUtil.INIT_COUNT_TIMER;
+
+										//恢复生命值
+										mLifeAmount = GameConstant.LIFEAMOUNT;
+
+										//设置游戏运行状态为运行状态
+										myPlane.setAlive(true);
+										isPlay = true;
+										mMediaPlayer.start();
+										synchronized (thread) {
+											thread.notify();
+										}
 									}
 								});
 								rewardedVideoAd.loadAd();

@@ -9,7 +9,7 @@ package com.fungames.galaxyshooter.constant;
 public interface GameConstant {
 
 	//初始相关
-	int LIFEAMOUNT = 1;// 初始生命值
+	int LIFEAMOUNT = 5;// 初始生命值
 	int MISSILECOUNT = 5;// 初始导弹数
 	//TODO 修改生命最大值
 	int LIFE_MAXCOUNT = 9;// 生命最大值

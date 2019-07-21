@@ -2,6 +2,7 @@ package com.fungames.galaxyshooter;
 
 import android.app.Application;
 
+import com.facebook.ads.AdSettings;
 import com.facebook.ads.AudienceNetworkAds;
 import com.google.android.gms.ads.MobileAds;
 
@@ -16,6 +17,8 @@ public class MyApplication extends Application {
         super.onCreate();
         //init facebook sdk
         AudienceNetworkAds.initialize(this);
+        //设置错误处理触发onError
+        AdSettings.setIntegrationErrorMode(AdSettings.IntegrationErrorMode.INTEGRATION_ERROR_CALLBACK_MODE);
 
         //init admob sdk
         MobileAds.initialize(this, this.getString(R.string.admob_id));

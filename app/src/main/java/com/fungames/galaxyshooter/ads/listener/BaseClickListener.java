@@ -7,10 +7,11 @@ import com.fungames.galaxyshooter.constant.ConstantUtil;
 import com.fungames.galaxyshooter.view.MainView;
 
 /**
- * Created by daipeng on 2019/7/20.
+ * Created by daipeng on 2019/7/21.
  */
 
 public class BaseClickListener implements View.OnClickListener {
+
 
     private final String TAG = BaseClickListener.class.getSimpleName();
 
@@ -24,6 +25,7 @@ public class BaseClickListener implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
+        v.setClickable(false);
         //移除倒计时handler
         mainView.getmCountDownHandler().removeMessages(ConstantUtil.RESURRECTION_COUNT);
 

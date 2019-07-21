@@ -15,6 +15,6 @@
     <string name="game_level">Level</string>
 
     <string name="total_score">Total Score</string>
-    <string name="resurrection">double click continue</string>
+    <string name="resurrection">Continue</string>
 
 </resources>

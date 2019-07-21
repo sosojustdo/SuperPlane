@@ -5,18 +5,19 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.media.MediaPlayer;
 import android.os.Message;
-import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.facebook.ads.Ad;
-import com.facebook.ads.AdError;
 import com.facebook.ads.RewardedVideoAd;
-import com.facebook.ads.RewardedVideoAdListener;
 import com.fungames.galaxyshooter.R;
 import com.fungames.galaxyshooter.ads.listener.BaseClickListener;
 import com.fungames.galaxyshooter.constant.ConstantUtil;
@@ -40,10 +41,6 @@ import com.fungames.galaxyshooter.sounds.GameSoundPool;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import razerdp.basepopup.QuickPopupBuilder;
-import razerdp.basepopup.QuickPopupConfig;
-import razerdp.widget.QuickPopup;
 
 /**
  * 游戏进行的主界面
@@ -91,7 +88,8 @@ public class MainView extends BaseView {
 	private TextView countView; //倒计时textview
 	private CountDownHandler mCountDownHandler;//处理倒计时Handler
 	private int initTimer = ConstantUtil.INIT_COUNT_TIMER;//倒计时5秒
-    private QuickPopup quickPopup;
+	private final View view = LayoutInflater.from(getContext()).inflate(R.layout.popupwindow_message, null, false);
+	private final PopupWindow popupWindow = new PopupWindow(view, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
 
 	private int mLifeAmount;// 生命总数
 	private GameObjectFactory factory;
@@ -107,17 +105,12 @@ public class MainView extends BaseView {
 	public int getSumScore() {
 		return sumScore;
 	}
-    public QuickPopup getQuickPopup() {
-        return quickPopup;
-    }
 	public CountDownHandler getmCountDownHandler() {
 		return mCountDownHandler;
 	}
-	public RewardedVideoAd getFbRewardedVideoAd() {
-		return fbRewardedVideoAd;
+	public PopupWindow getPopupWindow() {
+		return popupWindow;
 	}
-
-
 
 	public MainView(Context context, GameSoundPool sounds) {
 		super(context, sounds);
@@ -629,7 +622,6 @@ public class MainView extends BaseView {
 				if (mLifeAmount > 0) {
 					mLifeAmount--;
 					myPlane.setAlive(true);
-					//TODO 线程池优化
 					new Thread(new Runnable() {
 
 						@Override
@@ -641,7 +633,6 @@ public class MainView extends BaseView {
 						}
 					}).start();
 				} else {
-					//TODO 生命值结束看广告
 					if (DebugConstant.ETERNAL) {
 						// 设置不死亡，供游戏测试使用
 						threadFlag = true;
@@ -660,81 +651,24 @@ public class MainView extends BaseView {
 						}).start();
 
 					} else {
-                        myPlane.setAlive(true);
-
-
-						// 正常情况，游戏结束,并停止音乐
-						quickPopup = QuickPopupBuilder.with(mainActivity).contentView(R.layout.popupwindow_message)
-							.config(new QuickPopupConfig().withClick(R.id.resurrection, new View.OnClickListener(){
-								@Override
-								public void onClick(View v) {
-									showAdsRewardedVideoBeforeHandle();
-
-									//init facebook ads
-									fbRewardedVideoAd.setAdListener(new RewardedVideoAdListener() {
-										@Override
-										public void onRewardedVideoCompleted() {
-											Log.d(TAG, "Rewarded video completed!");
-										}
-
-										@Override
-										public void onError(Ad ad, AdError adError) {
-											Log.e(TAG, "Rewarded video ad failed to load: " + adError.getErrorMessage());
-										}
-
-										@Override
-										public void onAdLoaded(Ad ad) {
-											Log.d(TAG, "Rewarded video ad is loaded and ready to be displayed!");
-											fbRewardedVideoAd.show();
-										}
-
-										@Override
-										public void onAdClicked(Ad ad) {
-											Log.d(TAG, "Rewarded video ad clicked!");
-										}
-
-										@Override
-										public void onLoggingImpression(Ad ad) {
-											Log.d(TAG, "Rewarded video ad impression logged!");
-										}
-
-										@Override
-										public void onRewardedVideoClosed() {
-											Log.d(TAG, "Rewarded video ad closed!");
-											adsRewardedVideoClosedHandler();
-										}
-									});
-									fbRewardedVideoAd.loadAd();
-
-
-									//show admob ads
-								}
-							}, true)).build();
-
 						//暂停游戏
+                        myPlane.setAlive(true);
 						isPlay = false;
 						mMediaPlayer.pause();
-
-						//设置是否允许点击BasePopup外部时触发dismiss
-						quickPopup.setOutSideDismiss(false);
-						//设置BasePopup是否允许返回键dismiss
-						quickPopup.setBackPressEnable(false);
-
-						countView = quickPopup.getContentView().findViewById(R.id.timer);
-
-						//展示PopupWindow
-						quickPopup.showPopupWindow();
-
-						//设置倒计时handler
-						Message message = mCountDownHandler.obtainMessage();
-						message.arg1 = 0;
-						message.arg2 = 1;
-						message.what = ConstantUtil.RESURRECTION_COUNT;
-						CountDownHandlerObject object = new CountDownHandlerObject(initTimer, quickPopup);
-						message.obj = object;
-						mCountDownHandler.sendMessageDelayed(message, ConstantUtil.DELAY_SEND_DURATION);
-
 						threadFlag = true;
+
+                        //初始化popupWindow
+						initPopupWindow(popupWindow);
+
+						//设置倒计时
+						setDelayCountDownHandler();
+
+						//展示popupWindow
+						popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+
+						TextView resurrectionView = popupWindow.getContentView().findViewById(R.id.resurrection);
+						resurrectionView.setOnClickListener(new BaseClickListener(this, fbRewardedVideoAd));
+
 						if (mMediaPlayer.isPlaying()) {
 							mMediaPlayer.stop();
 						}
@@ -752,17 +686,33 @@ public class MainView extends BaseView {
 		}
 	}
 
-	public void showAdsRewardedVideoBeforeHandle(){
-		//设置quickPopup handler事件
-		Message message = mCountDownHandler.obtainMessage();
+	//设置PopupWindow
+	public void initPopupWindow(PopupWindow popupWindow){
+		popupWindow.setFocusable(false);
+		popupWindow.setOutsideTouchable(false);
+
+		popupWindow.setTouchable(true);
+		popupWindow.setTouchInterceptor(new View.OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				return false;
+				// 这里如果返回true的话，touch事件将被拦截
+				// 拦截后 PopupWindow的onTouchEvent不被调用，这样点击外部区域无法dismiss
+			}
+		});
+		popupWindow.setBackgroundDrawable(new ColorDrawable(0x00000000));
+	}
+
+	public void setDelayCountDownHandler(){
+		//倒计时显示
+		countView = popupWindow.getContentView().findViewById(R.id.timer);
+		Message message = new Message();
 		message.arg1 = 0;
 		message.arg2 = 1;
-		message.what = ConstantUtil.POPUP_DISMISS;
-		message.obj = quickPopup;
-		mCountDownHandler.sendMessage(message);
-
-		//移除倒计时handler
-		mCountDownHandler.removeMessages(ConstantUtil.RESURRECTION_COUNT);
+		message.what = ConstantUtil.RESURRECTION_COUNT;
+		CountDownHandlerObject object = new CountDownHandlerObject(initTimer, popupWindow);
+		message.obj = object;
+		mCountDownHandler.sendMessageDelayed(message, ConstantUtil.DELAY_SEND_DURATION);
 	}
 
 	//激励视频看完关闭后游戏继续进行，重新初始化一些数据
@@ -821,7 +771,7 @@ public class MainView extends BaseView {
 		while (threadFlag) {
 			long startTime = System.currentTimeMillis();
 
-			Message message = mCountDownHandler.obtainMessage();
+			Message message = new Message();
 			message.arg1 = 2;
 			message.arg2 = 3;
 			message.what = ConstantUtil.RUNNING_GAME;

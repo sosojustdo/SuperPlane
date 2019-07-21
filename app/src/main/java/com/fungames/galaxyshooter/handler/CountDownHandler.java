@@ -2,13 +2,12 @@ package com.fungames.galaxyshooter.handler;
 
 import android.os.Handler;
 import android.os.Message;
+import android.widget.PopupWindow;
 
 import com.fungames.galaxyshooter.constant.ConstantUtil;
 import com.fungames.galaxyshooter.view.MainView;
 
 import java.lang.ref.WeakReference;
-
-import razerdp.widget.QuickPopup;
 
 /**
  * Created by daipeng on 2019/7/11.
@@ -37,11 +36,11 @@ public class CountDownHandler extends Handler {
                 msg.what = ConstantUtil.RESURRECTION_COUNT;
                 object.setInitTimer(timer -= 1000);
                 msg.obj = object;
-                QuickPopup quickPopup = object.getQuickPopup();
+                PopupWindow popupWindow = object.getPopupWindow();
                 if (timer > 0) {
                     sendMessageDelayed(msg, ConstantUtil.DELAY_SEND_DURATION);
                 }else{
-                    quickPopup.dismiss();
+                    popupWindow.dismiss();
 
                     //返回游戏重新开始
                     Message message = new Message();
@@ -51,21 +50,10 @@ public class CountDownHandler extends Handler {
                 }
                 break;
             case ConstantUtil.RUNNING_GAME:
-                msg = Message.obtain();
-                msg.arg1 = 2;
-                msg.arg2 = 3;
-                msg.what = ConstantUtil.RUNNING_GAME;
                 mainView.initObject();
                 mainView.drawSelf();
                 mainView.viewLogic();
                 break;
-            case ConstantUtil.POPUP_DISMISS:
-                //msg = Message.obtain();
-                msg.arg1 = 4;
-                msg.arg2 = 5;
-                msg.what = ConstantUtil.POPUP_DISMISS;
-                QuickPopup quickPopup1 = (QuickPopup) msg.obj;
-                quickPopup1.dismiss();
         }
     }
 

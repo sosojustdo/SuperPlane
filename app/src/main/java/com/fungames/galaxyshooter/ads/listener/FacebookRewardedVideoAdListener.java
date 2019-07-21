@@ -1,13 +1,11 @@
 package com.fungames.galaxyshooter.ads.listener;
 
-import android.os.Message;
 import android.util.Log;
 
 import com.facebook.ads.Ad;
 import com.facebook.ads.AdError;
 import com.facebook.ads.RewardedVideoAd;
 import com.facebook.ads.RewardedVideoAdListener;
-import com.fungames.galaxyshooter.constant.ConstantUtil;
 import com.fungames.galaxyshooter.view.MainView;
 
 /**
@@ -56,10 +54,7 @@ public class FacebookRewardedVideoAdListener implements RewardedVideoAdListener 
     @Override
     public void onRewardedVideoClosed() {
         Log.d(TAG, "Rewarded video ad closed!");
-        Message message = new Message();
-        message.arg1 = 6;
-        message.arg2 = 7;
-        message.what = ConstantUtil.CONTINUE_GAME;
-        mainView.getHandler().sendMessage(message);
+        mainView.getPopupWindow().dismiss();
+        mainView.adsRewardedVideoClosedHandler();
     }
 }

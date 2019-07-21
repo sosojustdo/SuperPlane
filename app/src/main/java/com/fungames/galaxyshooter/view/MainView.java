@@ -38,6 +38,8 @@ import com.fungames.galaxyshooter.plane.MiddlePlane;
 import com.fungames.galaxyshooter.plane.MyPlane;
 import com.fungames.galaxyshooter.plane.SmallPlane;
 import com.fungames.galaxyshooter.sounds.GameSoundPool;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.MobileAds;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +53,7 @@ public class MainView extends BaseView {
 	private final String TAG = MainView.class.getSimpleName();
 
 	private RewardedVideoAd fbRewardedVideoAd;//facebook激励视频
+	private com.google.android.gms.ads.reward.RewardedVideoAd admobRewardedVideoAd;//admob激励视频
 
 	private int missileCount; // 导弹的数量
 	private int middlePlaneScore; // 中型敌机的积分
@@ -200,8 +203,12 @@ public class MainView extends BaseView {
 			thread.start();
 		}
 
-		//onstruct RewardedVideoAd Object
-		fbRewardedVideoAd = new RewardedVideoAd(this.getContext(), "636703710139914_636706510139634");
+		//Init RewardedVideoAd Object
+		fbRewardedVideoAd = new RewardedVideoAd(this.getContext(), this.getContext().getString(R.string.placement_id));
+		//fbRewardedVideoAd.loadAd();
+
+		admobRewardedVideoAd = MobileAds.getRewardedVideoAdInstance(this.getContext());
+		admobRewardedVideoAd.loadAd(this.getContext().getString(R.string.admob_unit_id), new AdRequest.Builder().build());
 	}
 
 	// 视图销毁的方法
@@ -667,7 +674,7 @@ public class MainView extends BaseView {
 						popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
 
 						TextView resurrectionView = popupWindow.getContentView().findViewById(R.id.resurrection);
-						resurrectionView.setOnClickListener(new BaseClickListener(this, fbRewardedVideoAd));
+						resurrectionView.setOnClickListener(new BaseClickListener(this, fbRewardedVideoAd, admobRewardedVideoAd));
 
 						if (mMediaPlayer.isPlaying()) {
 							mMediaPlayer.stop();

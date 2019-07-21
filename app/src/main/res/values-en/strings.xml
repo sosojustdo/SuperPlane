@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="placement_id">636703710139914_636706510139634</string>
     <string name="admob_id">ca-app-pub-3940256099942544~3347511713</string>
+    <string name="admob_unit_id">ca-app-pub-3940256099942544/5224354917</string>
 
     <string name="app_name">Galaxy Shooter</string>
     <string name="hello_world">Hello world!</string>

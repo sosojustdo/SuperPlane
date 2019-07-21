@@ -10,6 +10,12 @@ android {
         targetSdkVersion 28
         versionCode 2
         versionName "2"
+        multiDexEnabled true
+        javaCompileOptions {
+            annotationProcessorOptions {
+                includeCompileClasspath true
+            }
+        }
     }
 
     buildTypes {
@@ -31,13 +37,16 @@ repositories {
 }
 
 dependencies {
+    compile 'com.android.support:support-v4:18.0.0'
+    implementation 'com.google.firebase:firebase-core:16.0.8'
+
     //facebook sdk
     implementation(name: 'AudienceNetwork', ext: 'aar')
     implementation(name: 'DebugSettings', ext: 'aar')
-
-    compile 'com.android.support:support-v4:18.0.0'
 
     //admob sdk
     implementation 'com.google.firebase:firebase-ads:17.2.0'
 
 }
+
+apply plugin: 'com.google.gms.google-services'

@@ -17,10 +17,13 @@ public class BaseClickListener implements View.OnClickListener {
 
     private MainView mainView;
     private RewardedVideoAd fbRewardedVideoAd;
+    private com.google.android.gms.ads.reward.RewardedVideoAd admobRewardedVideoAd;
 
-    public BaseClickListener(MainView mainView, RewardedVideoAd fbRewardedVideoAd) {
+    public BaseClickListener(MainView mainView, RewardedVideoAd fbRewardedVideoAd,
+                             com.google.android.gms.ads.reward.RewardedVideoAd admobRewardedVideoAd) {
         this.mainView = mainView;
         this.fbRewardedVideoAd = fbRewardedVideoAd;
+        this.admobRewardedVideoAd = admobRewardedVideoAd;
     }
 
     @Override
@@ -36,5 +39,6 @@ public class BaseClickListener implements View.OnClickListener {
         fbRewardedVideoAd.loadAd();
 
         //show admob ads
+        //admobRewardedVideoAd.setRewardedVideoAdListener(new AdmobRewardedVideoAdListener(admobRewardedVideoAd, mainView));
     }
 }

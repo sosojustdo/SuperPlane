@@ -21,7 +21,7 @@ android {
     buildTypes {
         release {
             minifyEnabled true
-            proguardFiles 'proguard-android.txt', 'proguard-project.txt'
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 }
@@ -46,6 +46,11 @@ dependencies {
 
     //admob sdk
     implementation 'com.google.firebase:firebase-ads:17.2.0'
+
+    //ironSource sdk
+    implementation 'com.ironsource.sdk:mediationsdk:6.9.0@jar'
+    //implementation files('libs/mediationsdk-6.9.0@jar')
+    implementation files('libs/android-support-v4-1@jar')
 
 }
 

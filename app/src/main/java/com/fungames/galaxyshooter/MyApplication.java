@@ -22,5 +22,7 @@ public class MyApplication extends Application {
 
         //init admob sdk
         MobileAds.initialize(this, this.getString(R.string.admob_id));
+
     }
+
 }

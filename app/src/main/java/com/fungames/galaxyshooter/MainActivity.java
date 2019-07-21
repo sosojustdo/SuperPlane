@@ -16,6 +16,7 @@ import com.fungames.galaxyshooter.sounds.GameSoundPool;
 import com.fungames.galaxyshooter.view.EndView;
 import com.fungames.galaxyshooter.view.MainView;
 import com.fungames.galaxyshooter.view.ReadyView;
+import com.ironsource.mediationsdk.IronSource;
 
 
 public class  MainActivity extends Activity {
@@ -49,6 +50,9 @@ public class  MainActivity extends Activity {
 
         readyView = new ReadyView(this, sounds);
         setContentView(readyView);
+
+        //init IronSource sdk
+        IronSource.init(this, this.getString(R.string.ironSource_appkey), IronSource.AD_UNIT.REWARDED_VIDEO);
     }
 
     /**
@@ -125,6 +129,17 @@ public class  MainActivity extends Activity {
             }
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    //https://developers.ironsrc.com/ironsource-mobile/android/android-sdk/#step-3
+    protected void onResume() {
+        super.onResume();
+        IronSource.onResume(this);
+    }
+
+    protected void onPause() {
+        super.onPause();
+        IronSource.onPause(this);
     }
 
 }

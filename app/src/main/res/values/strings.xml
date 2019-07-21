@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="admob_id">ca-app-pub-3940256099942544~3347511713</string>
+
     <string name="app_name">银河大战</string>
     <string name="hello_world">你好</string>
     <string name="menu_settings">设置</string>

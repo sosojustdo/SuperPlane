@@ -13,7 +13,12 @@ import android.view.SurfaceHolder;
 import android.view.View;
 import android.widget.TextView;
 
+import com.facebook.ads.Ad;
+import com.facebook.ads.AdError;
+import com.facebook.ads.RewardedVideoAd;
+import com.facebook.ads.RewardedVideoAdListener;
 import com.fungames.galaxyshooter.R;
+import com.fungames.galaxyshooter.ads.listener.BaseClickListener;
 import com.fungames.galaxyshooter.constant.ConstantUtil;
 import com.fungames.galaxyshooter.constant.DebugConstant;
 import com.fungames.galaxyshooter.constant.GameConstant;
@@ -40,8 +45,6 @@ import razerdp.basepopup.QuickPopupBuilder;
 import razerdp.basepopup.QuickPopupConfig;
 import razerdp.widget.QuickPopup;
 
-import com.facebook.ads.*;
-
 /**
  * 游戏进行的主界面
  */
@@ -50,7 +53,7 @@ public class MainView extends BaseView {
 
 	private final String TAG = MainView.class.getSimpleName();
 
-	private RewardedVideoAd rewardedVideoAd;//facebook激励视频
+	private RewardedVideoAd fbRewardedVideoAd;//facebook激励视频
 
 	private int missileCount; // 导弹的数量
 	private int middlePlaneScore; // 中型敌机的积分
@@ -90,28 +93,33 @@ public class MainView extends BaseView {
 	private int initTimer = ConstantUtil.INIT_COUNT_TIMER;//倒计时5秒
     private QuickPopup quickPopup;
 
-
 	private int mLifeAmount;// 生命总数
 	private GameObjectFactory factory;
 	private MediaPlayer mMediaPlayer; // 用来实现背景音乐播放
-
 	private List<BigPlane> bigPlanes;// 大型机集合,用于实现子弹的遍历
-	
 	private int bossAppearAgain_score;//boss重新出现需要的积分
 
+
+	//generate get methods
 	public TextView getCountView() {
 		return countView;
 	}
-
 	public int getSumScore() {
 		return sumScore;
 	}
-
     public QuickPopup getQuickPopup() {
         return quickPopup;
     }
+	public CountDownHandler getmCountDownHandler() {
+		return mCountDownHandler;
+	}
+	public RewardedVideoAd getFbRewardedVideoAd() {
+		return fbRewardedVideoAd;
+	}
 
-    public MainView(Context context, GameSoundPool sounds) {
+
+
+	public MainView(Context context, GameSoundPool sounds) {
 		super(context, sounds);
         isPlay = true;
 		
@@ -200,16 +208,16 @@ public class MainView extends BaseView {
 		}
 
 		//onstruct RewardedVideoAd Object
-		rewardedVideoAd = new RewardedVideoAd(this.getContext(), "636703710139914_636706510139634");
+		fbRewardedVideoAd = new RewardedVideoAd(this.getContext(), "636703710139914_636706510139634");
 	}
 
 	// 视图销毁的方法
 	@Override
 	public void surfaceDestroyed(SurfaceHolder arg0) {
 		super.surfaceDestroyed(arg0);
-		if (rewardedVideoAd != null) {
-			rewardedVideoAd.destroy();
-			rewardedVideoAd = null;
+		if (fbRewardedVideoAd != null) {
+			fbRewardedVideoAd.destroy();
+			fbRewardedVideoAd = null;
 		}
 		release();// 释放资源
 		mMediaPlayer.stop();
@@ -653,69 +661,53 @@ public class MainView extends BaseView {
 
 					} else {
                         myPlane.setAlive(true);
+
+
 						// 正常情况，游戏结束,并停止音乐
 						quickPopup = QuickPopupBuilder.with(mainActivity).contentView(R.layout.popupwindow_message)
-								.config(new QuickPopupConfig().withClick(R.id.resurrection, new View.OnClickListener(){
+							.config(new QuickPopupConfig().withClick(R.id.resurrection, new View.OnClickListener(){
 								@Override
 								public void onClick(View v) {
-								//设置quickPopup handler事件
-								Message message = mCountDownHandler.obtainMessage();
-								message.arg1 = 0;
-								message.arg2 = 1;
-								message.what = ConstantUtil.POPUP_DISMISS;
-								message.obj = quickPopup;
-								mCountDownHandler.sendMessage(message);
+									showAdsRewardedVideoBeforeHandle();
 
-								//移除倒计时handler
-								mCountDownHandler.removeMessages(ConstantUtil.RESURRECTION_COUNT);
-
-								//init ads
-								rewardedVideoAd.setAdListener(new RewardedVideoAdListener() {
-									@Override
-									public void onRewardedVideoCompleted() {
-										Log.d(TAG, "Rewarded video completed!");
-									}
-
-									@Override
-									public void onError(Ad ad, AdError adError) {
-										Log.e(TAG, "Rewarded video ad failed to load: " + adError.getErrorMessage());
-									}
-
-									@Override
-									public void onAdLoaded(Ad ad) {
-										Log.d(TAG, "Rewarded video ad is loaded and ready to be displayed!");
-										rewardedVideoAd.show();
-									}
-
-									@Override
-									public void onAdClicked(Ad ad) {
-										Log.d(TAG, "Rewarded video ad clicked!");
-									}
-
-									@Override
-									public void onLoggingImpression(Ad ad) {
-										Log.d(TAG, "Rewarded video ad impression logged!");
-									}
-
-									@Override
-									public void onRewardedVideoClosed() {
-										Log.d(TAG, "Rewarded video ad closed!");
-										//复活计数重新初始化
-										initTimer = ConstantUtil.INIT_COUNT_TIMER;
-
-										//恢复生命值
-										mLifeAmount = GameConstant.LIFEAMOUNT;
-
-										//设置游戏运行状态为运行状态
-										myPlane.setAlive(true);
-										isPlay = true;
-										mMediaPlayer.start();
-										synchronized (thread) {
-											thread.notify();
+									//init facebook ads
+									fbRewardedVideoAd.setAdListener(new RewardedVideoAdListener() {
+										@Override
+										public void onRewardedVideoCompleted() {
+											Log.d(TAG, "Rewarded video completed!");
 										}
-									}
-								});
-								rewardedVideoAd.loadAd();
+
+										@Override
+										public void onError(Ad ad, AdError adError) {
+											Log.e(TAG, "Rewarded video ad failed to load: " + adError.getErrorMessage());
+										}
+
+										@Override
+										public void onAdLoaded(Ad ad) {
+											Log.d(TAG, "Rewarded video ad is loaded and ready to be displayed!");
+											fbRewardedVideoAd.show();
+										}
+
+										@Override
+										public void onAdClicked(Ad ad) {
+											Log.d(TAG, "Rewarded video ad clicked!");
+										}
+
+										@Override
+										public void onLoggingImpression(Ad ad) {
+											Log.d(TAG, "Rewarded video ad impression logged!");
+										}
+
+										@Override
+										public void onRewardedVideoClosed() {
+											Log.d(TAG, "Rewarded video ad closed!");
+											adsRewardedVideoClosedHandler();
+										}
+									});
+									fbRewardedVideoAd.loadAd();
+
+
+									//show admob ads
 								}
 							}, true)).build();
 
@@ -757,6 +749,36 @@ public class MainView extends BaseView {
 		} finally {
 			if (canvas != null)
 				sfh.unlockCanvasAndPost(canvas);
+		}
+	}
+
+	public void showAdsRewardedVideoBeforeHandle(){
+		//设置quickPopup handler事件
+		Message message = mCountDownHandler.obtainMessage();
+		message.arg1 = 0;
+		message.arg2 = 1;
+		message.what = ConstantUtil.POPUP_DISMISS;
+		message.obj = quickPopup;
+		mCountDownHandler.sendMessage(message);
+
+		//移除倒计时handler
+		mCountDownHandler.removeMessages(ConstantUtil.RESURRECTION_COUNT);
+	}
+
+	//激励视频看完关闭后游戏继续进行，重新初始化一些数据
+	public void adsRewardedVideoClosedHandler(){
+		//复活计数重新初始化
+		initTimer = ConstantUtil.INIT_COUNT_TIMER;
+
+		//恢复生命值
+		mLifeAmount = GameConstant.LIFEAMOUNT;
+
+		//设置游戏运行状态为运行状态
+		myPlane.setAlive(true);
+		isPlay = true;
+		mMediaPlayer.start();
+		synchronized (thread) {
+			thread.notify();
 		}
 	}
 

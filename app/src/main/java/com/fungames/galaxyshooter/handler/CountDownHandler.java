@@ -44,7 +44,6 @@ public class CountDownHandler extends Handler {
                     quickPopup.dismiss();
 
                     //返回游戏重新开始
-                    //TODO 上一次的积分和等级需要保持
                     Message message = new Message();
                     message.what = ConstantUtil.TO_END_VIEW;
                     message.arg1 = Integer.valueOf(mainView.getSumScore());

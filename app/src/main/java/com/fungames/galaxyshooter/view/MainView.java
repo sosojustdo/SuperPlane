@@ -225,7 +225,7 @@ public class MainView extends BaseView {
 		} else if (event.getAction() == MotionEvent.ACTION_DOWN) {
 			float x = event.getX();
 			float y = event.getY();
-			if (x > 10 && x < 10 + play_bt_w && y > 10 && y < 10 + play_bt_h) {
+			if (x > 10 && x < 10 + play_bt_w && y > 10 && y < 10 + play_bt_h && !popupWindow.isShowing()) {//复活弹层显示时不可点击
 				if (isPlay) {
 					isPlay = false;
 				} else {
@@ -717,6 +717,8 @@ public class MainView extends BaseView {
 
 	//激励视频看完关闭后游戏继续进行，重新初始化一些数据
 	public void adsRewardedVideoClosedHandler(){
+		popupWindow.dismiss();
+
 		//复活计数重新初始化
 		initTimer = ConstantUtil.INIT_COUNT_TIMER;
 

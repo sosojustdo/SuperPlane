@@ -25,7 +25,9 @@ public class BaseClickListener implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
+        //禁用元素操作
         v.setClickable(false);
+
         //移除倒计时handler
         mainView.getmCountDownHandler().removeMessages(ConstantUtil.RESURRECTION_COUNT);
 

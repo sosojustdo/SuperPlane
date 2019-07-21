@@ -54,7 +54,6 @@ public class FacebookRewardedVideoAdListener implements RewardedVideoAdListener 
     @Override
     public void onRewardedVideoClosed() {
         Log.d(TAG, "Rewarded video ad closed!");
-        mainView.getPopupWindow().dismiss();
         mainView.adsRewardedVideoClosedHandler();
     }
 }

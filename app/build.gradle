@@ -49,7 +49,7 @@ dependencies {
 
     //ironSource sdk
     implementation 'com.ironsource.sdk:mediationsdk:6.9.0@jar'
-    //implementation files('libs/mediationsdk-6.9.0@jar')
+    implementation files('libs/mediationsdk-6.9.0@jar')
     implementation files('libs/android-support-v4-1@jar')
 
 }

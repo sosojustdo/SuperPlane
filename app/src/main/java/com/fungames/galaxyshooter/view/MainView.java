@@ -723,14 +723,18 @@ public class MainView extends BaseView {
 	}
 
 	//激励视频看完关闭后游戏继续进行，重新初始化一些数据
-	public void adsRewardedVideoClosedHandler(){
+	public void adsRewardedVideoClosedHandler(boolean reward){
 		popupWindow.dismiss();
 
 		//复活计数重新初始化
 		initTimer = ConstantUtil.INIT_COUNT_TIMER;
 
-		//恢复生命值
-		mLifeAmount = GameConstant.LIFEAMOUNT;
+		if(reward){
+			//看完激励视频奖励恢复生命值
+			mLifeAmount = GameConstant.LIFEAMOUNT;
+		}else{
+			mLifeAmount = 1;
+		}
 
 		//设置游戏运行状态为运行状态
 		myPlane.setAlive(true);

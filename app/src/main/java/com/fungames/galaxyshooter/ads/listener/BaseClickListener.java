@@ -5,15 +5,13 @@ import android.view.View;
 import com.facebook.ads.RewardedVideoAd;
 import com.fungames.galaxyshooter.constant.ConstantUtil;
 import com.fungames.galaxyshooter.view.MainView;
+import com.ironsource.mediationsdk.IronSource;
 
 /**
  * Created by daipeng on 2019/7/21.
  */
 
 public class BaseClickListener implements View.OnClickListener {
-
-
-    private final String TAG = BaseClickListener.class.getSimpleName();
 
     private MainView mainView;
     private RewardedVideoAd fbRewardedVideoAd;
@@ -40,5 +38,10 @@ public class BaseClickListener implements View.OnClickListener {
 
         //show admob ads
         //admobRewardedVideoAd.setRewardedVideoAdListener(new AdmobRewardedVideoAdListener(admobRewardedVideoAd, mainView));
+
+        //show iron ads
+        //IronSource.setRewardedVideoListener(new IronSourceRewardedVideoListener(mainView));
+        //IronSource.showRewardedVideo();
+
     }
 }

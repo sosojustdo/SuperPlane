@@ -44,7 +44,7 @@ public class AdmobRewardedVideoAdListener implements RewardedVideoAdListener {
     @Override
     public void onRewardedVideoAdClosed() {
         Log.d(TAG, "Rewarded video ad closed!");
-        mainView.adsRewardedVideoClosedHandler();
+        mainView.adsRewardedVideoClosedHandler(true);
     }
 
     @Override
@@ -60,6 +60,7 @@ public class AdmobRewardedVideoAdListener implements RewardedVideoAdListener {
     @Override
     public void onRewardedVideoAdFailedToLoad(int i) {
         Log.d(TAG, "Rewarded video ad failed load!");
+        mainView.adsRewardedVideoClosedHandler(false);
     }
 
     @Override

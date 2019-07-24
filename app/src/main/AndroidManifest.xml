@@ -4,11 +4,12 @@
     android:versionCode="1"
     android:versionName="1.0" >
 
-    <uses-sdk
-        android:targetSdkVersion="26" />
+    <uses-sdk android:targetSdkVersion="26" />
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="18" />
 
     <application
         android:allowBackup="false"
@@ -28,22 +29,36 @@
             </intent-filter>
         </activity>
 
+        <!-- ironsource activity  -->
         <activity
             android:name="com.ironsource.sdk.controller.ControllerActivity"
             android:configChanges="orientation|screenSize"
             android:hardwareAccelerated="true" />
-
         <activity
             android:name="com.ironsource.sdk.controller.InterstitialActivity"
             android:configChanges="orientation|screenSize"
             android:hardwareAccelerated="true"
             android:theme="@android:style/Theme.Translucent" />
-
         <activity
             android:name="com.ironsource.sdk.controller.OpenUrlActivity"
             android:configChanges="orientation|screenSize"
             android:hardwareAccelerated="true"
             android:theme="@android:style/Theme.Translucent" />
+
+        <!-- vungle activitie-->
+        <activity
+            android:name="com.vungle.warren.ui.VungleActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize"
+            android:launchMode="singleTop"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+        <receiver
+            android:name="com.vungle.warren.NetworkProviderReceiver"
+            android:enabled="false" >
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </receiver>
 
         <!-- admob meta data -->
         <meta-data

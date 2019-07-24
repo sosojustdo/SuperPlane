@@ -4,6 +4,8 @@
     <string name="admob_id">ca-app-pub-3940256099942544~3347511713</string>
     <string name="admob_unit_id">ca-app-pub-3940256099942544/5224354917</string>
     <string name="ironSource_appkey">9a0de58d</string>
+    <string name="vungle_app_id">5d302cba96a07c0018caf5a8</string>
+    <string name="vungle_placement_id">5d302cba96a07c0018caf5a8</string>
 
 
     <string name="app_name">银河大战</string>

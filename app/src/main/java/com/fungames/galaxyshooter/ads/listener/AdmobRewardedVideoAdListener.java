@@ -26,9 +26,6 @@ public class AdmobRewardedVideoAdListener implements RewardedVideoAdListener {
     @Override
     public void onRewardedVideoAdLoaded() {
         Log.d(TAG, "Rewarded video ad loaded!");
-        if (rewardedVideoAd.isLoaded()) {
-            rewardedVideoAd.show();
-        }
     }
 
     @Override

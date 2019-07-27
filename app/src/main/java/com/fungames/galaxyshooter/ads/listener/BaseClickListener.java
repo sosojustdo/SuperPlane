@@ -37,11 +37,15 @@ public class BaseClickListener implements View.OnClickListener {
         //fbRewardedVideoAd.loadAd();
 
         //show admob ads
-        //admobRewardedVideoAd.setRewardedVideoAdListener(new AdmobRewardedVideoAdListener(admobRewardedVideoAd, mainView));
+        admobRewardedVideoAd.setRewardedVideoAdListener(new AdmobRewardedVideoAdListener(admobRewardedVideoAd, mainView));
+        if(admobRewardedVideoAd.isLoaded()){
+            admobRewardedVideoAd.show();
+        }
+
 
         //show iron ads
-        IronSource.setRewardedVideoListener(new IronSourceRewardedVideoListener(mainView));
-        IronSource.showRewardedVideo();
+        //IronSource.setRewardedVideoListener(new IronSourceRewardedVideoListener(mainView));
+        //IronSource.showRewardedVideo();
 
     }
 }

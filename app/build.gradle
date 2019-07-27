@@ -50,8 +50,12 @@ repositories {
         url  "https://adcolony.bintray.com/AdColony"
     }
     maven {
-        //HyperMX SDK
+        //fyber:fairbid SDK
         url "https://raw.githubusercontent.com/HyprMXMobile/Android-SDKs/master"
+    }
+    maven {
+        //HyperMX SDK
+        url  "https://fyber.bintray.com/fairbid-maven"
     }
     maven {
         //Vungle SDK
@@ -68,8 +72,11 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:16.0.8'
 
     //facebook sdk
-    implementation(name: 'AudienceNetwork', ext: 'aar')
-    implementation(name: 'DebugSettings', ext: 'aar')
+    //implementation(name: 'AudienceNetwork', ext: 'aar')
+    //implementation(name: 'DebugSettings', ext: 'aar')
+    //implementation 'com.facebook.android:audience-network-sdk:5.4.1'
+    implementation 'com.android.support:support-annotations:28.0.0'
+
 
     //admob sdk
     implementation 'com.google.firebase:firebase-ads:17.2.0'
@@ -107,7 +114,7 @@ dependencies {
     implementation 'com.ironsource.adapters:chartboostadapter:4.1.9@jar'
 
     //Facebook
-    //implementation 'com.ironsource.adapters:facebookadapter:4.3.2@jar'
+    implementation 'com.ironsource.adapters:facebookadapter:4.3.2@jar'
 
     //Inmobi
     implementation 'com.ironsource.adapters:inmobiadapter:4.3.1@jar'
@@ -143,7 +150,7 @@ dependencies {
 
     //Fyber
     implementation 'com.ironsource.adapters:fyberadapter:4.3.0@jar'
-    //Need To Add Fyber SDK Manually
+    implementation 'com.fyber:fairbid:9.56.0'
 
     //Amazon
     implementation 'com.ironsource.adapters:amazonadapter:4.3.0@jar'

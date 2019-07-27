@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.media.MediaPlayer;
+import android.os.AsyncTask;
 import android.os.Message;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -38,6 +39,7 @@ import com.fungames.galaxyshooter.plane.MiddlePlane;
 import com.fungames.galaxyshooter.plane.MyPlane;
 import com.fungames.galaxyshooter.plane.SmallPlane;
 import com.fungames.galaxyshooter.sounds.GameSoundPool;
+import com.fungames.galaxyshooter.thread.FixedThreadPool;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.MobileAds;
 import com.ironsource.mediationsdk.IronSource;
@@ -45,6 +47,7 @@ import com.ironsource.mediationsdk.integration.IntegrationHelper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ForkJoinWorkerThread;
 
 /**
  * 游戏进行的主界面
@@ -203,16 +206,33 @@ public class MainView extends BaseView {
 			thread.start();
 		}
 
-		//TODO async init sdks
+		/**
+		AsyncTask<MainView, Integer, String> task = new AsyncTask<MainView, Integer, String>() {
+			@SuppressLint("WrongThread")
+			@Override
+			protected String doInBackground(MainView... baseViews) {
+				//Init RewardedVideoAd Object
+				fbRewardedVideoAd = new RewardedVideoAd(getContext(), getContext().getString(R.string.placement_id));
 
-		//Init RewardedVideoAd Object
+				//init admob sdk
+				admobRewardedVideoAd = MobileAds.getRewardedVideoAdInstance(getContext());
+				admobRewardedVideoAd.loadAd(getContext().getString(R.string.admob_unit_id), new AdRequest.Builder().build());
+
+				//init IronSource sdk
+				IntegrationHelper.validateIntegration(mainActivity);
+				IronSource.shouldTrackNetworkState(getContext(), true);
+				IronSource.init(mainActivity, getContext().getString(R.string.ironSource_appkey), IronSource.AD_UNIT.REWARDED_VIDEO);
+				return null;
+			}
+		};
+		task.execute(this);
+		 **/
+
 		fbRewardedVideoAd = new RewardedVideoAd(this.getContext(), this.getContext().getString(R.string.placement_id));
 
-		//init admob sdk
 		admobRewardedVideoAd = MobileAds.getRewardedVideoAdInstance(this.getContext());
 		admobRewardedVideoAd.loadAd(this.getContext().getString(R.string.admob_unit_id), new AdRequest.Builder().build());
 
-		//init IronSource sdk
 		IntegrationHelper.validateIntegration(mainActivity);
 		IronSource.shouldTrackNetworkState(getContext(), true);
 		IronSource.init(mainActivity, getContext().getString(R.string.ironSource_appkey), IronSource.AD_UNIT.REWARDED_VIDEO);
@@ -279,8 +299,8 @@ public class MainView extends BaseView {
 					}
 
 					// 此线程不能放在绘图函数中，否则当处于无敌状态或者导弹连续按下时，爆炸效果无法显现
+					/**
 					new Thread(new Runnable() {
-
 						@Override
 						public void run() {
 							try {
@@ -292,7 +312,21 @@ public class MainView extends BaseView {
 							}
 
 						}
-					}).start();
+					}).start();**/
+
+					FixedThreadPool.execute("mainview-setMissileState", false, new Runnable() {
+						@Override
+						public void run() {
+							try {
+								Thread.sleep(GameConstant.MISSILEBOOM_TIME);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							} finally {
+								myPlane.setMissileState(false);
+							}
+
+						}
+					});
 
 				}
 				return true;
@@ -636,6 +670,7 @@ public class MainView extends BaseView {
 				if (mLifeAmount > 0) {
 					mLifeAmount--;
 					myPlane.setAlive(true);
+					/**
 					new Thread(new Runnable() {
 
 						@Override
@@ -645,7 +680,16 @@ public class MainView extends BaseView {
 							myPlane.setDamaged(false);
 							myPlane.setInvincibleTime(GameConstant.INVINCIBLE_TIME);
 						}
-					}).start();
+					}).start();**/
+					FixedThreadPool.execute("minevar-drawSelf-alive", false, new Runnable() {
+						@Override
+						public void run() {
+							myPlane.setDamaged(true);
+							myPlane.setInvincibleTime(GameConstant.BOOM_TIME);
+							myPlane.setDamaged(false);
+							myPlane.setInvincibleTime(GameConstant.INVINCIBLE_TIME);
+						}
+					});
 				} else {
 					if (DebugConstant.ETERNAL) {
 						// 设置不死亡，供游戏测试使用
@@ -653,8 +697,7 @@ public class MainView extends BaseView {
 						myPlane.setAlive(true);
 
 						// 继续实现机体受损及闪光效果
-						new Thread(new Runnable() {
-
+						/**new Thread(new Runnable() {
 							@Override
 							public void run() {
 								myPlane.setDamaged(true);
@@ -662,8 +705,16 @@ public class MainView extends BaseView {
 								myPlane.setDamaged(false);
 								myPlane.setInvincibleTime(GameConstant.INVINCIBLE_TIME);
 							}
-						}).start();
-
+						}).start();**/
+						FixedThreadPool.execute("minevar-drawSelf-boom", false, new Runnable() {
+							@Override
+							public void run() {
+								myPlane.setDamaged(true);
+								myPlane.setInvincibleTime(GameConstant.BOOM_TIME);
+								myPlane.setDamaged(false);
+								myPlane.setInvincibleTime(GameConstant.INVINCIBLE_TIME);
+							}
+						});
 					} else {
 						//暂停游戏
                         myPlane.setAlive(true);
@@ -731,7 +782,7 @@ public class MainView extends BaseView {
 
 	//激励视频看完关闭后游戏继续进行，重新初始化一些数据
 	public void adsRewardedVideoClosedHandler(){
-		//popupWindow.dismiss();
+		popupWindow.dismiss();
 
 		//复活计数重新初始化
 		initTimer = ConstantUtil.INIT_COUNT_TIMER;

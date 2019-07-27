@@ -33,7 +33,7 @@ public class FacebookRewardedVideoAdListener implements RewardedVideoAdListener 
     @Override
     public void onError(Ad ad, AdError adError) {
         Log.e(TAG, "Rewarded video ad failed to load: " + adError.getErrorMessage());
-        mainView.adsRewardedVideoClosedHandler(false);
+        mainView.adsRewardedVideoClosedHandler();
     }
 
     @Override
@@ -55,6 +55,6 @@ public class FacebookRewardedVideoAdListener implements RewardedVideoAdListener 
     @Override
     public void onRewardedVideoClosed() {
         Log.d(TAG, "Rewarded video ad closed!");
-        mainView.adsRewardedVideoClosedHandler(true);
+        mainView.adsRewardedVideoClosedHandler();
     }
 }

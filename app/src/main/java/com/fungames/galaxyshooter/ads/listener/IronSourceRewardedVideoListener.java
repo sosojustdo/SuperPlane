@@ -1,7 +1,10 @@
 package com.fungames.galaxyshooter.ads.listener;
 
+import android.os.Message;
 import android.util.Log;
 
+import com.fungames.galaxyshooter.constant.ConstantUtil;
+import com.fungames.galaxyshooter.handler.CountDownHandlerObject;
 import com.fungames.galaxyshooter.view.MainView;
 import com.ironsource.mediationsdk.logger.IronSourceError;
 import com.ironsource.mediationsdk.model.Placement;
@@ -29,7 +32,14 @@ public class IronSourceRewardedVideoListener implements RewardedVideoListener {
     @Override
     public void onRewardedVideoAdClosed() {
         Log.d(TAG, "Rewarded video ad closed!");
-        mainView.adsRewardedVideoClosedHandler(true);
+        Message message = new Message();
+        message.arg1 = 4;
+        message.arg2 = 5;
+        message.what = ConstantUtil.POPUP_DISMISS;
+        CountDownHandlerObject object = new CountDownHandlerObject(mainView.getPopupWindow());
+        message.obj = object;
+        mainView.getmCountDownHandler().sendMessage(message);
+        mainView.adsRewardedVideoClosedHandler();
     }
 
     @Override
@@ -55,7 +65,7 @@ public class IronSourceRewardedVideoListener implements RewardedVideoListener {
     @Override
     public void onRewardedVideoAdShowFailed(IronSourceError ironSourceError) {
         Log.d(TAG, "Rewarded video ad error:" + ironSourceError.getErrorMessage());
-        mainView.adsRewardedVideoClosedHandler(false);
+        mainView.adsRewardedVideoClosedHandler();
     }
 
     @Override

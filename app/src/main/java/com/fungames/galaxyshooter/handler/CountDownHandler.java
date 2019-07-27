@@ -54,6 +54,14 @@ public class CountDownHandler extends Handler {
                 mainView.drawSelf();
                 mainView.viewLogic();
                 break;
+            case ConstantUtil.POPUP_DISMISS:
+                msg.arg1 = 4;
+                msg.arg2 = 5;
+                CountDownHandlerObject object1 = (CountDownHandlerObject) msg.obj;
+                PopupWindow popupWindow2 = object1.getPopupWindow();
+                popupWindow2.dismiss();
+                mainView.adsRewardedVideoClosedHandler();
+                break;
         }
     }
 

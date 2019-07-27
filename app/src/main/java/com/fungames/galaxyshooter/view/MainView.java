@@ -40,6 +40,8 @@ import com.fungames.galaxyshooter.plane.SmallPlane;
 import com.fungames.galaxyshooter.sounds.GameSoundPool;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.MobileAds;
+import com.ironsource.mediationsdk.IronSource;
+import com.ironsource.mediationsdk.integration.IntegrationHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,8 +51,6 @@ import java.util.List;
  */
 @SuppressLint("ViewConstructor")
 public class MainView extends BaseView {
-
-	private final String TAG = MainView.class.getSimpleName();
 
 	private RewardedVideoAd fbRewardedVideoAd;//facebook激励视频
 	private com.google.android.gms.ads.reward.RewardedVideoAd admobRewardedVideoAd;//admob激励视频
@@ -203,12 +203,19 @@ public class MainView extends BaseView {
 			thread.start();
 		}
 
+		//TODO async init sdks
+
 		//Init RewardedVideoAd Object
 		fbRewardedVideoAd = new RewardedVideoAd(this.getContext(), this.getContext().getString(R.string.placement_id));
-		//fbRewardedVideoAd.loadAd();
 
+		//init admob sdk
 		admobRewardedVideoAd = MobileAds.getRewardedVideoAdInstance(this.getContext());
 		admobRewardedVideoAd.loadAd(this.getContext().getString(R.string.admob_unit_id), new AdRequest.Builder().build());
+
+		//init IronSource sdk
+		IntegrationHelper.validateIntegration(mainActivity);
+		IronSource.shouldTrackNetworkState(getContext(), true);
+		IronSource.init(mainActivity, getContext().getString(R.string.ironSource_appkey), IronSource.AD_UNIT.REWARDED_VIDEO);
 	}
 
 	// 视图销毁的方法
@@ -723,18 +730,14 @@ public class MainView extends BaseView {
 	}
 
 	//激励视频看完关闭后游戏继续进行，重新初始化一些数据
-	public void adsRewardedVideoClosedHandler(boolean reward){
-		popupWindow.dismiss();
+	public void adsRewardedVideoClosedHandler(){
+		//popupWindow.dismiss();
 
 		//复活计数重新初始化
 		initTimer = ConstantUtil.INIT_COUNT_TIMER;
 
-		if(reward){
-			//看完激励视频奖励恢复生命值
-			mLifeAmount = GameConstant.LIFEAMOUNT;
-		}else{
-			mLifeAmount = 1;
-		}
+		//看完激励视频奖励恢复生命值
+		mLifeAmount = GameConstant.LIFEAMOUNT;
 
 		//设置游戏运行状态为运行状态
 		myPlane.setAlive(true);
@@ -824,4 +827,5 @@ public class MainView extends BaseView {
 		message.arg1 = Integer.valueOf(sumScore);
 		mainActivity.getHandler().sendMessage(message);
 	}
+
 }

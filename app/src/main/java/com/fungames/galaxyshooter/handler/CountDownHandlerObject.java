@@ -17,6 +17,11 @@ public class CountDownHandlerObject {
         this.popupWindow = popupWindow;
     }
 
+    public CountDownHandlerObject(PopupWindow popupWindow) {
+        this.popupWindow = popupWindow;
+    }
+
+
     public int getInitTimer() {
         return initTimer;
     }

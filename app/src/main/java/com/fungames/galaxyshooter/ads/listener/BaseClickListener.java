@@ -33,15 +33,15 @@ public class BaseClickListener implements View.OnClickListener {
         mainView.getmCountDownHandler().removeMessages(ConstantUtil.RESURRECTION_COUNT);
 
         //show fb ads
-        fbRewardedVideoAd.setAdListener(new FacebookRewardedVideoAdListener(fbRewardedVideoAd, mainView));
-        fbRewardedVideoAd.loadAd();
+        //fbRewardedVideoAd.setAdListener(new FacebookRewardedVideoAdListener(fbRewardedVideoAd, mainView));
+        //fbRewardedVideoAd.loadAd();
 
         //show admob ads
         //admobRewardedVideoAd.setRewardedVideoAdListener(new AdmobRewardedVideoAdListener(admobRewardedVideoAd, mainView));
 
         //show iron ads
-        //IronSource.setRewardedVideoListener(new IronSourceRewardedVideoListener(mainView));
-        //IronSource.showRewardedVideo();
+        IronSource.setRewardedVideoListener(new IronSourceRewardedVideoListener(mainView));
+        IronSource.showRewardedVideo();
 
     }
 }

@@ -18,7 +18,7 @@ public class FixedThreadPool {
 
     private static int coreSize = Runtime.getRuntime().availableProcessors();
 
-    private static ExecutorService getExecutor(String threadPrefix, boolean daemon){
+    public static ExecutorService getExecutor(String threadPrefix, boolean daemon){
         return new ThreadPoolExecutor(coreSize, coreSize, 5000L, TimeUnit.MINUTES,
                 new LinkedBlockingDeque<Runnable>(1024), new NamedThreadFactory(threadPrefix, daemon));
     }

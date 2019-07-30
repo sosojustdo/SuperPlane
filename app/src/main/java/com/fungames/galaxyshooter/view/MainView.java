@@ -7,7 +7,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.media.MediaPlayer;
-import android.os.AsyncTask;
 import android.os.Message;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -39,15 +38,11 @@ import com.fungames.galaxyshooter.plane.MiddlePlane;
 import com.fungames.galaxyshooter.plane.MyPlane;
 import com.fungames.galaxyshooter.plane.SmallPlane;
 import com.fungames.galaxyshooter.sounds.GameSoundPool;
+import com.fungames.galaxyshooter.thread.AsyncInitAdsTask;
 import com.fungames.galaxyshooter.thread.FixedThreadPool;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.MobileAds;
-import com.ironsource.mediationsdk.IronSource;
-import com.ironsource.mediationsdk.integration.IntegrationHelper;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ForkJoinWorkerThread;
 
 /**
  * 游戏进行的主界面
@@ -104,7 +99,7 @@ public class MainView extends BaseView {
 	private int bossAppearAgain_score;//boss重新出现需要的积分
 
 
-	//generate get methods
+	//generate get set methods
 	public TextView getCountView() {
 		return countView;
 	}
@@ -116,6 +111,18 @@ public class MainView extends BaseView {
 	}
 	public PopupWindow getPopupWindow() {
 		return popupWindow;
+	}
+	public void setFbRewardedVideoAd(RewardedVideoAd fbRewardedVideoAd) {
+		this.fbRewardedVideoAd = fbRewardedVideoAd;
+	}
+	public void setAdmobRewardedVideoAd(com.google.android.gms.ads.reward.RewardedVideoAd admobRewardedVideoAd) {
+		this.admobRewardedVideoAd = admobRewardedVideoAd;
+	}
+	public RewardedVideoAd getFbRewardedVideoAd() {
+		return fbRewardedVideoAd;
+	}
+	public com.google.android.gms.ads.reward.RewardedVideoAd getAdmobRewardedVideoAd() {
+		return admobRewardedVideoAd;
 	}
 
 	public MainView(Context context, GameSoundPool sounds) {
@@ -206,28 +213,10 @@ public class MainView extends BaseView {
 			thread.start();
 		}
 
+		AsyncInitAdsTask initAdsTask = new AsyncInitAdsTask(fbRewardedVideoAd, admobRewardedVideoAd);
+		initAdsTask.executeOnExecutor(FixedThreadPool.getExecutor("mainview-init-ads", false),this);
+
 		/**
-		AsyncTask<MainView, Integer, String> task = new AsyncTask<MainView, Integer, String>() {
-			@SuppressLint("WrongThread")
-			@Override
-			protected String doInBackground(MainView... baseViews) {
-				//Init RewardedVideoAd Object
-				fbRewardedVideoAd = new RewardedVideoAd(getContext(), getContext().getString(R.string.placement_id));
-
-				//init admob sdk
-				admobRewardedVideoAd = MobileAds.getRewardedVideoAdInstance(getContext());
-				admobRewardedVideoAd.loadAd(getContext().getString(R.string.admob_unit_id), new AdRequest.Builder().build());
-
-				//init IronSource sdk
-				IntegrationHelper.validateIntegration(mainActivity);
-				IronSource.shouldTrackNetworkState(getContext(), true);
-				IronSource.init(mainActivity, getContext().getString(R.string.ironSource_appkey), IronSource.AD_UNIT.REWARDED_VIDEO);
-				return null;
-			}
-		};
-		task.execute(this);
-		 **/
-
 		fbRewardedVideoAd = new RewardedVideoAd(this.getContext(), this.getContext().getString(R.string.placement_id));
 
 		admobRewardedVideoAd = MobileAds.getRewardedVideoAdInstance(this.getContext());
@@ -236,6 +225,7 @@ public class MainView extends BaseView {
 		IntegrationHelper.validateIntegration(mainActivity);
 		IronSource.shouldTrackNetworkState(getContext(), true);
 		IronSource.init(mainActivity, getContext().getString(R.string.ironSource_appkey), IronSource.AD_UNIT.REWARDED_VIDEO);
+		 **/
 	}
 
 	// 视图销毁的方法

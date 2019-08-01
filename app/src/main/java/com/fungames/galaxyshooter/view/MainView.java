@@ -237,7 +237,7 @@ public class MainView extends BaseView {
 			fbRewardedVideoAd = null;
 		}
 		release();// 释放资源
-		mMediaPlayer.stop();
+		//mMediaPlayer.stop();
 	}
 
 	// 响应触屏事件的方法
@@ -775,6 +775,8 @@ public class MainView extends BaseView {
 		if(dismiss){
 			popupWindow.dismiss();
 		}
+		//擦除计数
+		countView.setText("");
 
 		//复活计数重新初始化
 		initTimer = ConstantUtil.INIT_COUNT_TIMER;

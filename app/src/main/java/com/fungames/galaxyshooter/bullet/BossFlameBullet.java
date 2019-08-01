@@ -50,7 +50,7 @@ public class BossFlameBullet extends EnemyBullet {
             canvas.save();
             canvas.clipRect(object_x, object_y, object_x + object_width,
                     object_y + object_height);
-            canvas.drawBitmap(bullet, object_x, object_y, paint);
+            canvas.drawBitmap(reloadPlaneBitMap(bullet, R.drawable.boss_bullet_default), object_x, object_y, paint);
             canvas.restore();
             logic();
         }

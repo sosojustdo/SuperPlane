@@ -54,13 +54,13 @@ public class BossDefaultBullet extends EnemyBullet {
 		if (isAlive) {
 			canvas.save();
 			canvas.clipRect(object_x, object_y, object_x + object_width,object_y + object_height);
-			canvas.drawBitmap(bullet, object_x, object_y, paint);
+			canvas.drawBitmap(reloadPlaneBitMap(bullet, R.drawable.bossbullet_default), object_x, object_y, paint);
 			canvas.restore();
 		}
 		if (isAlive2) {
 			canvas.save();
 			canvas.clipRect(object_x2, object_y2, object_x2 + object_width,object_y2 + object_height);
-			canvas.drawBitmap(bullet, object_x2, object_y2, paint);
+			canvas.drawBitmap(reloadPlaneBitMap(bullet, R.drawable.bossbullet_default), object_x2, object_y2, paint);
 			canvas.restore();
 		}
 		logic();

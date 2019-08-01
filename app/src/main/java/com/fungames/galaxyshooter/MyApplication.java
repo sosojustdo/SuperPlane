@@ -1,6 +1,7 @@
 package com.fungames.galaxyshooter;
 
 import android.app.Application;
+import android.util.Log;
 
 import com.facebook.ads.AdSettings;
 import com.facebook.ads.AudienceNetworkAds;
@@ -13,6 +14,8 @@ import com.vungle.warren.Vungle;
  */
 
 public class MyApplication extends Application {
+
+    private final String TAG = MyApplication.class.getSimpleName();
 
     @Override
     public void onCreate() {
@@ -31,11 +34,13 @@ public class MyApplication extends Application {
             public void onSuccess() {
                 // Initialization has succeeded and SDK is ready to load an ad or play one if there
                 // is one pre-cached already
+                Log.d(TAG, "Vungle rewarded video ad init success...");
             }
 
             @Override
             public void onError(Throwable throwable) {
                 // Initialization error occurred - throwable.getLocalizedMessage() contains error message
+                Log.d(TAG, "Vungle rewarded video ad init error:" + throwable.getMessage());
             }
 
             @Override
@@ -43,6 +48,7 @@ public class MyApplication extends Application {
                 // Callback to notify when an ad becomes available for the cache optimized placement
                 // NOTE: This callback works only for the cache optimized placement. Otherwise, please use
                 // LoadAdCallback with loadAd API for loading placements.
+                Log.d(TAG, "Vungle rewarded video ad init auto cache available, placementId:" + placementId);
             }
         });
 

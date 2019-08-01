@@ -15,17 +15,19 @@ public class AdmobRewardedVideoAdListener implements RewardedVideoAdListener {
 
     private final String TAG = AdmobRewardedVideoAdListener.class.getSimpleName();
 
-    private RewardedVideoAd rewardedVideoAd;
     private MainView mainView;
 
-    public AdmobRewardedVideoAdListener(RewardedVideoAd rewardedVideoAd, MainView mainView) {
-        this.rewardedVideoAd = rewardedVideoAd;
+    public AdmobRewardedVideoAdListener(MainView mainView) {
         this.mainView = mainView;
     }
 
     @Override
     public void onRewardedVideoAdLoaded() {
         Log.d(TAG, "Rewarded video ad loaded!");
+        if(mainView.getAdmobRewardedVideoAd().isLoaded()){
+            mainView.getAdmobRewardedVideoAd().show();
+        }
+
     }
 
     @Override

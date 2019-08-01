@@ -43,7 +43,7 @@ public class BigPlaneBullet extends EnemyBullet {
 			canvas.save();
 			canvas.clipRect(object_x, object_y, object_x + object_width,
 					object_y + object_height);
-			canvas.drawBitmap(bullet, object_x, object_y, paint);
+			canvas.drawBitmap(reloadPlaneBitMap(bullet, R.drawable.bigplane_bullet), object_x, object_y, paint);
 			canvas.restore();
 			logic();
 		}

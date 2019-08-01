@@ -34,21 +34,23 @@ public class BaseClickListener implements View.OnClickListener {
         //移除倒计时handler
         mainView.getmCountDownHandler().removeMessages(ConstantUtil.RESURRECTION_COUNT);
 
+        /**
         //show fb ads
-        //fbRewardedVideoAd.setAdListener(new FacebookRewardedVideoAdListener(fbRewardedVideoAd, mainView));
-        //fbRewardedVideoAd.loadAd();
+        fbRewardedVideoAd.setAdListener(new FacebookRewardedVideoAdListener(fbRewardedVideoAd, mainView));
+        AdSettings.addTestDevice("2b29c369-3664-4c70-a5e9-7b1c0357cf76");
+        fbRewardedVideoAd.loadAd();
 
         //show admob ads
-        //mainView.getAdmobRewardedVideoAd().setRewardedVideoAdListener(new AdmobRewardedVideoAdListener(admobRewardedVideoAd, mainView));
-        //mainView.getAdmobRewardedVideoAd().loadAd(mainView.getMainActivity().getBaseContext().getString(R.string.admob_unit_id), new AdRequest.Builder().build());
-        //if(mainView.getAdmobRewardedVideoAd().isLoaded()){
-        //    mainView.getAdmobRewardedVideoAd().show();
-        //}
-
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice("6AD329453E75AE00087B9BA5A7B6C67A")
+                .build();
+        mainView.getAdmobRewardedVideoAd().setRewardedVideoAdListener(new AdmobRewardedVideoAdListener(mainView));
+        mainView.getAdmobRewardedVideoAd().loadAd(mainView.getMainActivity().getBaseContext().getString(R.string.admob_unit_id), adRequest);
+         **/
 
         //show iron ads
-        IronSource.setRewardedVideoListener(new IronSourceRewardedVideoListener(mainView));
-        IronSource.showRewardedVideo();
+        //IronSource.setRewardedVideoListener(new IronSourceRewardedVideoListener(mainView));
+        IronSource.showRewardedVideo("Game_Over");
 
     }
 }

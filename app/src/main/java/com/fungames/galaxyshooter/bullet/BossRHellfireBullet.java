@@ -47,7 +47,7 @@ public class BossRHellfireBullet extends EnemyBullet {
 			canvas.save();
 			canvas.clipRect(object_x, object_y, object_x + object_width,
 					object_y + object_height);
-			canvas.drawBitmap(bullet, object_x, object_y, paint);
+			canvas.drawBitmap(reloadPlaneBitMap(bullet, R.drawable.boss_bullet_hellfire_red), object_x, object_y, paint);
 			canvas.restore();
 			logic();
 		}

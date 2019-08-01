@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 
 import com.facebook.ads.RewardedVideoAd;
 import com.fungames.galaxyshooter.R;
+import com.fungames.galaxyshooter.ads.listener.IronSourceRewardedVideoListener;
 import com.fungames.galaxyshooter.view.MainView;
 import com.google.android.gms.ads.MobileAds;
 import com.ironsource.mediationsdk.IronSource;
@@ -36,12 +37,13 @@ public class AsyncInitAdsTask extends AsyncTask<MainView, Integer, Void> {
 
         fbRewardedVideoAd = new RewardedVideoAd(mainView.getContext(), mainView.getContext().getString(R.string.placement_id));
 
-        admobRewardedVideoAd = MobileAds.getRewardedVideoAdInstance(mainView.getMainActivity().getBaseContext());
+        admobRewardedVideoAd = MobileAds.getRewardedVideoAdInstance(mainView.getContext());
         //admobRewardedVideoAd.loadAd(mainView.getContext().getString(R.string.admob_unit_id), new AdRequest.Builder().build());
 
-        //IntegrationHelper.validateIntegration(mainView.getMainActivity());
-        //IronSource.shouldTrackNetworkState(mainView.getContext(), true);
+        IronSource.shouldTrackNetworkState(mainView.getContext(), true);
+        IntegrationHelper.validateIntegration(mainView.getMainActivity());
         IronSource.init(mainView.getMainActivity(), mainView.getContext().getString(R.string.ironSource_appkey), IronSource.AD_UNIT.REWARDED_VIDEO);
+        IronSource.setRewardedVideoListener(new IronSourceRewardedVideoListener(mainView));
 
         mainView.setAdmobRewardedVideoAd(admobRewardedVideoAd);
         mainView.setFbRewardedVideoAd(fbRewardedVideoAd);

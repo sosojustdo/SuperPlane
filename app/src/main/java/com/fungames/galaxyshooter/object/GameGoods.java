@@ -4,6 +4,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
+import com.fungames.galaxyshooter.R;
 import com.fungames.galaxyshooter.constant.ConstantUtil;
 
 import java.util.Random;
@@ -40,7 +41,7 @@ public class GameGoods extends GameObject {
         if (isAlive) {
             canvas.save();
             canvas.clipRect(object_x, object_y, object_x + object_width, object_y + object_height);
-            canvas.drawBitmap(bmp, object_x, object_y, paint);
+            canvas.drawBitmap(reloadPlaneBitMap(bmp, R.drawable.bullet_goods1), object_x, object_y, paint);
             canvas.restore();
             logic();
         }

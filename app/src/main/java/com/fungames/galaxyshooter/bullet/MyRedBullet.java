@@ -43,7 +43,7 @@ public class MyRedBullet extends Bullet {
 		if (isAlive) {
 			canvas.save();
 			canvas.clipRect(object_x, object_y, object_x + object_width,object_y + object_height);
-			canvas.drawBitmap(bullet, object_x, object_y, paint);
+			canvas.drawBitmap(reloadPlaneBitMap(bullet, R.drawable.my_bullet_red), object_x, object_y, paint);
 			canvas.restore();
 		}
 

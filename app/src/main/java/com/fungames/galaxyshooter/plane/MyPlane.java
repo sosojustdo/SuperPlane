@@ -99,7 +99,7 @@ public class MyPlane extends GameObject implements IMyPlane {
         canvas.save();
         canvas.clipRect(object_x, object_y, object_x + object_width,
                 object_y + object_height);
-        canvas.drawBitmap(mPlane, object_x - x, object_y, paint);
+        canvas.drawBitmap(reloadPlaneBitMap(mPlane, R.drawable.myplane), object_x - x, object_y, paint);
         canvas.restore();
 
         if (isInvincible) {
@@ -129,7 +129,7 @@ public class MyPlane extends GameObject implements IMyPlane {
         canvas.save();
         canvas.clipRect(object_x, object_y, object_x + object_width,
                 object_y + object_height);
-        canvas.drawBitmap(mPlaneExplosion, object_x - x, object_y, paint);
+        canvas.drawBitmap(reloadPlaneBitMap(mPlaneExplosion, R.drawable.myplaneexplosion), object_x - x, object_y, paint);
         canvas.restore();
 
         if (bulletType == ConstantUtil.MYBULLET) {

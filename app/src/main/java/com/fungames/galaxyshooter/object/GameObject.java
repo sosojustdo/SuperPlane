@@ -1,8 +1,12 @@
 package com.fungames.galaxyshooter.object;
 
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+
+import com.fungames.galaxyshooter.R;
 
 /**
  * 游戏物品
@@ -96,5 +100,12 @@ abstract public class GameObject {
 
     public void setAlive(boolean isAlive) {
         this.isAlive = isAlive;
+    }
+
+    protected Bitmap reloadPlaneBitMap(Bitmap planeBitmap, int id){
+        if(planeBitmap.isRecycled()){
+            planeBitmap = BitmapFactory.decodeResource(resources, id);
+        }
+        return planeBitmap;
     }
 }

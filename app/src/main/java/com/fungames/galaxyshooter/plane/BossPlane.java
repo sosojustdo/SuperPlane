@@ -195,7 +195,7 @@ public class BossPlane extends EnemyPlane {
         canvas.save();
         canvas.clipRect(object_x, object_y, object_x + object_width,
                 object_y + object_height);
-        canvas.drawBitmap(boosPlaneBomb, object_x, object_y - y, paint);
+        canvas.drawBitmap(reloadPlaneBitMap(boosPlaneBomb, R.drawable.bossplane_bomb), object_x, object_y - y, paint);
         canvas.restore();
 
         // 绘制帧动画
@@ -222,7 +222,7 @@ public class BossPlane extends EnemyPlane {
             canvas.save();
             canvas.clipRect(object_x, object_y,
                     object_x + object_width, object_y + object_height);
-            canvas.drawBitmap(bossPlane_crazy, object_x, object_y - y,
+            canvas.drawBitmap(reloadPlaneBitMap(bossPlane_crazy, R.drawable.bossplane_crazy), object_x, object_y - y,
                     paint);
             canvas.restore();
             currentFrame++;
@@ -237,7 +237,7 @@ public class BossPlane extends EnemyPlane {
             canvas.save();
             canvas.clipRect(object_x, object_y,
                     object_x + object_width, object_y + object_height);
-            canvas.drawBitmap(bossPlane_crazy, object_x, object_y
+            canvas.drawBitmap(reloadPlaneBitMap(bossPlane_crazy, R.drawable.bossplane_crazy), object_x, object_y
                     - object_height, paint);
             canvas.restore();
         }
@@ -247,7 +247,7 @@ public class BossPlane extends EnemyPlane {
             canvas.save();
             canvas.clipRect(object_x, object_y,
                     object_x + object_width, object_y + object_height);
-            canvas.drawBitmap(boosPlane, object_x, object_y
+            canvas.drawBitmap(reloadPlaneBitMap(boosPlane, R.drawable.boosplane), object_x, object_y
                     - object_height, paint);
             canvas.restore();
 
@@ -258,7 +258,7 @@ public class BossPlane extends EnemyPlane {
             canvas.save();
             canvas.clipRect(object_x, object_y,
                     object_x + object_width, object_y + object_height);
-            canvas.drawBitmap(boosPlane, object_x, object_y, paint);
+            canvas.drawBitmap(reloadPlaneBitMap(boosPlane, R.drawable.boosplane), object_x, object_y, paint);
             canvas.restore();
         }
 

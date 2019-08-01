@@ -54,7 +54,7 @@ public class MiddlePlane extends EnemyPlane {
                 if (isVisible) {
                     canvas.save();
                     canvas.clipRect(object_x, object_y, object_x + object_width, object_y + object_height);
-                    canvas.drawBitmap(middlePlane, object_x, object_y, paint);
+                    canvas.drawBitmap(reloadPlaneBitMap(middlePlane, R.drawable.middle), object_x, object_y, paint);
                     canvas.restore();
                 }
                 logic();
@@ -62,7 +62,7 @@ public class MiddlePlane extends EnemyPlane {
                 int y = (int) (currentFrame * object_height);
                 canvas.save();
                 canvas.clipRect(object_x, object_y, object_x + object_width, object_y + object_height);
-                canvas.drawBitmap(middlePlane, object_x, object_y - y, paint);
+                canvas.drawBitmap(reloadPlaneBitMap(middlePlane, R.drawable.middle), object_x, object_y - y, paint);
                 canvas.restore();
                 currentFrame++;
                 if (currentFrame >= 4) {

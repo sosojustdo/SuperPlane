@@ -81,7 +81,7 @@ public class BigPlane extends EnemyPlane {
 					canvas.save();
 					canvas.clipRect(object_x, object_y,
 							object_x + object_width, object_y + object_height);
-					canvas.drawBitmap(bigPlane, object_x, object_y
+					canvas.drawBitmap(reloadPlaneBitMap(bigPlane, R.drawable.big), object_x, object_y
 							- object_height, paint);
 					canvas.restore();
 				}
@@ -90,17 +90,17 @@ public class BigPlane extends EnemyPlane {
 					canvas.save();
 					canvas.clipRect(object_x, object_y,
 							object_x + object_width, object_y + object_height);
-					canvas.drawBitmap(bigPlane, object_x, object_y, paint);
+					canvas.drawBitmap(reloadPlaneBitMap(bigPlane, R.drawable.big), object_x, object_y, paint);
 					canvas.restore();
 				}
 				logic();
 				shoot(canvas); // 射击
 			} else {
-				int y = (int) (currentFrame * object_height); // ��õ�ǰ֡�����λͼ��Y����
+				int y = (int) (currentFrame * object_height);
 				canvas.save();
 				canvas.clipRect(object_x, object_y, object_x + object_width,
 						object_y + object_height);
-				canvas.drawBitmap(bigPlane, object_x, object_y - y, paint);
+				canvas.drawBitmap(reloadPlaneBitMap(bigPlane, R.drawable.big), object_x, object_y - y, paint);
 				canvas.restore();
 				currentFrame++;
 				if (currentFrame >= 5) {

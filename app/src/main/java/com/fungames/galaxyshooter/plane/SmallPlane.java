@@ -56,7 +56,7 @@ public class SmallPlane extends EnemyPlane {
                     canvas.save();
                     canvas.clipRect(object_x, object_y,
                             object_x + object_width, object_y + object_height);
-                    canvas.drawBitmap(smallPlane, object_x, object_y, paint);
+                    canvas.drawBitmap(getSmallPlaneBitMap(), object_x, object_y, paint);
                     canvas.restore();
                 }
                 logic();
@@ -65,7 +65,7 @@ public class SmallPlane extends EnemyPlane {
                 canvas.save();
                 canvas.clipRect(object_x, object_y, object_x + object_width,
                         object_y + object_height);
-                canvas.drawBitmap(smallPlane, object_x, object_y - y, paint);
+                canvas.drawBitmap(getSmallPlaneBitMap(), object_x, object_y - y, paint);
                 canvas.restore();
                 currentFrame++;
                 if (currentFrame >= 3) {
@@ -115,7 +115,13 @@ public class SmallPlane extends EnemyPlane {
         } else {
             isVisible = false;
         }
+    }
 
+    private Bitmap getSmallPlaneBitMap(){
+        if(smallPlane.isRecycled()){
+            smallPlane = BitmapFactory.decodeResource(resources, R.drawable.small);
+        }
+        return smallPlane;
     }
 
 }

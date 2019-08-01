@@ -39,7 +39,6 @@ public class IronSourceRewardedVideoListener implements RewardedVideoListener {
         CountDownHandlerObject object = new CountDownHandlerObject(mainView.getPopupWindow());
         message.obj = object;
         mainView.getmCountDownHandler().sendMessage(message);
-        mainView.adsRewardedVideoClosedHandler();
     }
 
     @Override
@@ -65,7 +64,13 @@ public class IronSourceRewardedVideoListener implements RewardedVideoListener {
     @Override
     public void onRewardedVideoAdShowFailed(IronSourceError ironSourceError) {
         Log.d(TAG, "Rewarded video ad error:" + ironSourceError.getErrorMessage());
-        mainView.adsRewardedVideoClosedHandler();
+        Message message = new Message();
+        message.arg1 = 4;
+        message.arg2 = 5;
+        message.what = ConstantUtil.POPUP_DISMISS;
+        CountDownHandlerObject object = new CountDownHandlerObject(mainView.getPopupWindow());
+        message.obj = object;
+        mainView.getmCountDownHandler().sendMessage(message);
     }
 
     @Override

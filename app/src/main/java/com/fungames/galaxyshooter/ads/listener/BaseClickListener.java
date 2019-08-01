@@ -7,6 +7,7 @@ import com.fungames.galaxyshooter.R;
 import com.fungames.galaxyshooter.constant.ConstantUtil;
 import com.fungames.galaxyshooter.view.MainView;
 import com.google.android.gms.ads.AdRequest;
+import com.ironsource.mediationsdk.IronSource;
 
 /**
  * Created by daipeng on 2019/7/21.
@@ -38,16 +39,16 @@ public class BaseClickListener implements View.OnClickListener {
         //fbRewardedVideoAd.loadAd();
 
         //show admob ads
-        mainView.getAdmobRewardedVideoAd().setRewardedVideoAdListener(new AdmobRewardedVideoAdListener(admobRewardedVideoAd, mainView));
-        mainView.getAdmobRewardedVideoAd().loadAd(mainView.getMainActivity().getBaseContext().getString(R.string.admob_unit_id), new AdRequest.Builder().build());
-        if(mainView.getAdmobRewardedVideoAd().isLoaded()){
-            mainView.getAdmobRewardedVideoAd().show();
-        }
+        //mainView.getAdmobRewardedVideoAd().setRewardedVideoAdListener(new AdmobRewardedVideoAdListener(admobRewardedVideoAd, mainView));
+        //mainView.getAdmobRewardedVideoAd().loadAd(mainView.getMainActivity().getBaseContext().getString(R.string.admob_unit_id), new AdRequest.Builder().build());
+        //if(mainView.getAdmobRewardedVideoAd().isLoaded()){
+        //    mainView.getAdmobRewardedVideoAd().show();
+        //}
 
 
         //show iron ads
-        //IronSource.setRewardedVideoListener(new IronSourceRewardedVideoListener(mainView));
-        //IronSource.showRewardedVideo();
+        IronSource.setRewardedVideoListener(new IronSourceRewardedVideoListener(mainView));
+        IronSource.showRewardedVideo();
 
     }
 }

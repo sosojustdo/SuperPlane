@@ -60,7 +60,7 @@ public class CountDownHandler extends Handler {
                 CountDownHandlerObject object1 = (CountDownHandlerObject) msg.obj;
                 PopupWindow popupWindow2 = object1.getPopupWindow();
                 popupWindow2.dismiss();
-                mainView.adsRewardedVideoClosedHandler();
+                mainView.adsRewardedVideoClosedHandler(false);
                 break;
         }
     }

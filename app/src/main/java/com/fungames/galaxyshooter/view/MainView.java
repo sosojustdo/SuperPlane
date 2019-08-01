@@ -771,8 +771,10 @@ public class MainView extends BaseView {
 	}
 
 	//激励视频看完关闭后游戏继续进行，重新初始化一些数据
-	public void adsRewardedVideoClosedHandler(){
-		popupWindow.dismiss();
+	public void adsRewardedVideoClosedHandler(boolean dismiss){
+		if(dismiss){
+			popupWindow.dismiss();
+		}
 
 		//复活计数重新初始化
 		initTimer = ConstantUtil.INIT_COUNT_TIMER;

@@ -39,8 +39,8 @@ public class AsyncInitAdsTask extends AsyncTask<MainView, Integer, Void> {
         admobRewardedVideoAd = MobileAds.getRewardedVideoAdInstance(mainView.getMainActivity().getBaseContext());
         //admobRewardedVideoAd.loadAd(mainView.getContext().getString(R.string.admob_unit_id), new AdRequest.Builder().build());
 
-        IntegrationHelper.validateIntegration(mainView.getMainActivity());
-        IronSource.shouldTrackNetworkState(mainView.getContext(), true);
+        //IntegrationHelper.validateIntegration(mainView.getMainActivity());
+        //IronSource.shouldTrackNetworkState(mainView.getContext(), true);
         IronSource.init(mainView.getMainActivity(), mainView.getContext().getString(R.string.ironSource_appkey), IronSource.AD_UNIT.REWARDED_VIDEO);
 
         mainView.setAdmobRewardedVideoAd(admobRewardedVideoAd);

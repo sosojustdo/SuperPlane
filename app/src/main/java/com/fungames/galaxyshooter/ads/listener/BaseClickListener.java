@@ -4,10 +4,13 @@ import android.view.View;
 
 import com.facebook.ads.RewardedVideoAd;
 import com.fungames.galaxyshooter.R;
+import com.fungames.galaxyshooter.constant.AdConfigConstant;
 import com.fungames.galaxyshooter.constant.ConstantUtil;
 import com.fungames.galaxyshooter.view.MainView;
 import com.google.android.gms.ads.AdRequest;
 import com.ironsource.mediationsdk.IronSource;
+import com.vungle.warren.AdConfig;
+import com.vungle.warren.Vungle;
 
 /**
  * Created by daipeng on 2019/7/21.
@@ -46,11 +49,23 @@ public class BaseClickListener implements View.OnClickListener {
                 .build();
         mainView.getAdmobRewardedVideoAd().setRewardedVideoAdListener(new AdmobRewardedVideoAdListener(mainView));
         mainView.getAdmobRewardedVideoAd().loadAd(mainView.getMainActivity().getBaseContext().getString(R.string.admob_unit_id), adRequest);
-         **/
 
         //show iron ads
-        //IronSource.setRewardedVideoListener(new IronSourceRewardedVideoListener(mainView));
+        IronSource.setRewardedVideoListener(new IronSourceRewardedVideoListener(mainView));
         IronSource.showRewardedVideo("Game_Over");
+         **/
+
+        //show vungle ads
+        VungleRewardedVideoAdListener vungleRewardedVideoAdListener = new VungleRewardedVideoAdListener(mainView);
+        if (Vungle.isInitialized()){
+            Vungle.loadAd(AdConfigConstant.VUNGLE_PLACEMENT_ID, vungleRewardedVideoAdListener);
+            if (Vungle.canPlayAd(AdConfigConstant.VUNGLE_PLACEMENT_ID)){
+                AdConfig adConfig = new AdConfig();
+                adConfig.setAutoRotate(true);
+                adConfig.setMuted(true);
+                Vungle.playAd(AdConfigConstant.VUNGLE_PLACEMENT_ID, adConfig, vungleRewardedVideoAdListener);
+            }
+        }
 
     }
 }

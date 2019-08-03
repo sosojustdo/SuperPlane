@@ -20,6 +20,7 @@ import com.ironsource.mediationsdk.IronSource;
 
 
 public class  MainActivity extends Activity {
+
     private EndView endView;
     private MainView mainView;
     private ReadyView readyView;

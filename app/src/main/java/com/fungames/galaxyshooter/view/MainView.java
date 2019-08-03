@@ -215,17 +215,6 @@ public class MainView extends BaseView {
 
 		AsyncInitAdsTask initAdsTask = new AsyncInitAdsTask(fbRewardedVideoAd, admobRewardedVideoAd);
 		initAdsTask.executeOnExecutor(FixedThreadPool.getExecutor("mainview-init-ads", false),this);
-
-		/**
-		fbRewardedVideoAd = new RewardedVideoAd(this.getContext(), this.getContext().getString(R.string.placement_id));
-
-		admobRewardedVideoAd = MobileAds.getRewardedVideoAdInstance(this.getContext());
-		admobRewardedVideoAd.loadAd(this.getContext().getString(R.string.admob_unit_id), new AdRequest.Builder().build());
-
-		IntegrationHelper.validateIntegration(mainActivity);
-		IronSource.shouldTrackNetworkState(getContext(), true);
-		IronSource.init(mainActivity, getContext().getString(R.string.ironSource_appkey), IronSource.AD_UNIT.REWARDED_VIDEO);
-		 **/
 	}
 
 	// 视图销毁的方法

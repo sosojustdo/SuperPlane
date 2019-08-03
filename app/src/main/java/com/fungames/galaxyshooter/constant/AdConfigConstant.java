@@ -14,6 +14,6 @@ public interface AdConfigConstant {
 
     public final static String VUNGLE_APP_ID = "5d302cba96a07c0018caf5a8";
 
-    public final static String VUNGLE_PLACEMENT_ID = "GAME_OVER_____-7256708";
+    public final static String VUNGLE_PLACEMENT_ID = "GAME_OVER_____-6265846";
 
 }

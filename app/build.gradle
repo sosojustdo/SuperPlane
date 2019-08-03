@@ -155,7 +155,6 @@ dependencies {
 
     //Amazon
     implementation 'com.ironsource.adapters:amazonadapter:4.3.0@jar'
-
 }
 
 apply plugin: 'com.google.gms.google-services'

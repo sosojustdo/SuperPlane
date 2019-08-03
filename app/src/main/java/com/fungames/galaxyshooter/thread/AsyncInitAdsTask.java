@@ -5,17 +5,14 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.facebook.ads.RewardedVideoAd;
-import com.fungames.galaxyshooter.R;
 import com.fungames.galaxyshooter.ads.listener.IronSourceRewardedVideoListener;
 import com.fungames.galaxyshooter.constant.AdConfigConstant;
 import com.fungames.galaxyshooter.view.MainView;
 import com.google.android.gms.ads.MobileAds;
 import com.ironsource.mediationsdk.IronSource;
 import com.ironsource.mediationsdk.integration.IntegrationHelper;
-import com.vungle.warren.AdConfig;
 import com.vungle.warren.InitCallback;
 import com.vungle.warren.LoadAdCallback;
-import com.vungle.warren.PlayAdCallback;
 import com.vungle.warren.Vungle;
 import com.vungle.warren.VungleSettings;
 

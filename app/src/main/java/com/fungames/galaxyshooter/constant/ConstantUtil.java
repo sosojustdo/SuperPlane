@@ -14,6 +14,7 @@ public interface ConstantUtil {
     int RESURRECTION_COUNT = 10;
     int RUNNING_GAME = 11;
     int POPUP_DISMISS = 12;
+    int READY_GAME = 13;
     
     int DELAY_SEND_DURATION = 1000;
     int INIT_COUNT_TIMER = 5000;

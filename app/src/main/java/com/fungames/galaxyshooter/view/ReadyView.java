@@ -6,11 +6,13 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.os.Message;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 
 import com.fungames.galaxyshooter.R;
 import com.fungames.galaxyshooter.constant.ConstantUtil;
+import com.fungames.galaxyshooter.handler.CountDownHandler;
 import com.fungames.galaxyshooter.sounds.GameSoundPool;
 
 /**
@@ -35,6 +37,8 @@ public class ReadyView extends BaseView {
     private String version = getContext().getString(R.string.version);
     private float version_width;//版本信息宽度
     private float version_height;//版本信息长度
+    private CountDownHandler mCountDownHandler;
+    public boolean showReady = false;
 
     private Bitmap text;                    // 文字
     private Bitmap button;                    // 按钮1
@@ -47,7 +51,8 @@ public class ReadyView extends BaseView {
         super(context, sounds);
         paint.setTextSize(40);
         rect = new Rect();
-        thread = new Thread(this);
+        //thread = new Thread(this);
+        mCountDownHandler = new CountDownHandler(this);
     }
 
     @Override
@@ -59,18 +64,22 @@ public class ReadyView extends BaseView {
     public void surfaceCreated(SurfaceHolder arg0) {
         super.surfaceCreated(arg0);
         initBitmap();
-        if (thread.isAlive()) {
-            thread.start();
-        } else {
-            thread = new Thread(this);
-            thread.start();
-        }
+
+        showReady = true;
+
+        Message message = Message.obtain();
+        message.what = ConstantUtil.READY_GAME;
+        message.arg1 = 6;
+        message.arg2 = 7;
+        mCountDownHandler.sendMessage(message);
     }
 
     @Override
     public void surfaceDestroyed(SurfaceHolder arg0) {
         super.surfaceDestroyed(arg0);
         release();
+        showReady = false;
+        mCountDownHandler.removeMessages(ConstantUtil.READY_GAME);
     }
 
     @Override
@@ -83,13 +92,13 @@ public class ReadyView extends BaseView {
                     && y > button_y && y < button_y + button.getHeight()) {
                 sounds.playSound(7, 0);
                 isBtChange = true;
-                drawSelf();
+                //drawSelf();
                 mainActivity.getHandler().sendEmptyMessage(ConstantUtil.TO_MAIN_VIEW);
             } else if (x > button_x && x < button_x + button.getWidth()
                     && y > button_y2 && y < button_y2 + button.getHeight()) {
                 sounds.playSound(7, 0);
                 isBtChange2 = true;
-                drawSelf();
+                //drawSelf();
                 mainActivity.getHandler().sendEmptyMessage(ConstantUtil.END_GAME);
             }
             return true;
@@ -218,18 +227,4 @@ public class ReadyView extends BaseView {
         }
     }
 
-    @Override
-    public void run() {
-        while (threadFlag) {
-            long startTime = System.currentTimeMillis();
-            drawSelf();
-            long endTime = System.currentTimeMillis();
-            try {
-                if (endTime - startTime < 400)
-                    Thread.sleep(400 - (endTime - startTime));
-            } catch (InterruptedException err) {
-                err.printStackTrace();
-            }
-        }
-    }
 }

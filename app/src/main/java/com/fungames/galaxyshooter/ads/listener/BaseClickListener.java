@@ -15,8 +15,6 @@ import com.vungle.warren.Vungle;
 
 public class BaseClickListener implements View.OnClickListener {
 
-    private final String TAG = BaseClickListener.class.getSimpleName();
-
     private MainView mainView;
     private RewardedVideoAd fbRewardedVideoAd;
     private com.google.android.gms.ads.reward.RewardedVideoAd admobRewardedVideoAd;
@@ -61,6 +59,8 @@ public class BaseClickListener implements View.OnClickListener {
             adConfig.setAutoRotate(true);
             adConfig.setMuted(true);
             Vungle.playAd(AdConfigConstant.VUNGLE_PLACEMENT_ID, adConfig, vungleRewardedVideoAdListener);
+        }else{
+            mainView.adsRewardedVideoClosedHandler(true);
         }
 
     }

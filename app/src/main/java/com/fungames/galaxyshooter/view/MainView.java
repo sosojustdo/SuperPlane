@@ -68,7 +68,7 @@ public class MainView extends BaseView {
 	private float play_bt_w;
 	private float play_bt_h;
 	private float missile_bt_y;
-	private boolean isPlay; // 标记游戏运行状态
+	public boolean isPlay; // 标记游戏运行状态
 	private boolean isTouchPlane; // 判断玩家是否按下屏幕
 
 	private Bitmap background; // 背景图片
@@ -94,7 +94,7 @@ public class MainView extends BaseView {
 
 	private int mLifeAmount;// 生命总数
 	private GameObjectFactory factory;
-	private MediaPlayer mMediaPlayer; // 用来实现背景音乐播放
+	public MediaPlayer mMediaPlayer; // 用来实现背景音乐播放
 	private List<BigPlane> bigPlanes;// 大型机集合,用于实现子弹的遍历
 	private int bossAppearAgain_score;//boss重新出现需要的积分
 
@@ -133,13 +133,14 @@ public class MainView extends BaseView {
 		mLifeAmount = GameConstant.LIFEAMOUNT;// 初始生命值
 		missileCount = GameConstant.MISSILECOUNT;// 初始导弹数
 
-		// 背景音乐
+//		 背景音乐
 		mMediaPlayer = MediaPlayer.create(mainActivity, R.raw.game);
 		mMediaPlayer.setLooping(true);
 		if (!mMediaPlayer.isPlaying()) {
 			mMediaPlayer.start();
 		}
 
+//		sounds.playSound(8,-1);
 		factory = new GameObjectFactory(); // 工厂类
 		bigPlanes = new ArrayList<BigPlane>(); // 大型机集合
 		enemyPlanes = new ArrayList<EnemyPlane>();// 敌机集合
@@ -182,6 +183,7 @@ public class MainView extends BaseView {
 		redBulletGoods = (RedBulletGoods) factory
 				.createRedBulletGoods(getResources());
 		thread = new Thread(this);
+        initBitmap(); // 初始化图片资源
 	}
 
 	// 视图改变的方法
@@ -194,7 +196,8 @@ public class MainView extends BaseView {
 	@Override
 	public void surfaceCreated(SurfaceHolder arg0) {
 		super.surfaceCreated(arg0);
-		initBitmap(); // 初始化图片资源
+		initSize();
+
 		for (GameObject obj : enemyPlanes) {
 			obj.setScreenWH(screen_width, screen_height);
 		}
@@ -206,12 +209,13 @@ public class MainView extends BaseView {
 
 		myPlane.setScreenWH(screen_width, screen_height);
 		myPlane.setAlive(true);
-		if (thread.isAlive()) {
-			thread.start();
-		} else {
-			thread = new Thread(this);
-			thread.start();
-		}
+
+		//drawSelf
+		Message message = Message.obtain();
+		message.arg1 = 2;
+		message.arg2 = 3;
+		message.what = ConstantUtil.RUNNING_GAME;
+		mCountDownHandler.sendMessage(message);
 
 		AsyncInitAdsTask initAdsTask = new AsyncInitAdsTask(fbRewardedVideoAd, admobRewardedVideoAd);
 		initAdsTask.executeOnExecutor(FixedThreadPool.getExecutor("mainview-init-ads", false),this);
@@ -221,11 +225,16 @@ public class MainView extends BaseView {
 	@Override
 	public void surfaceDestroyed(SurfaceHolder arg0) {
 		super.surfaceDestroyed(arg0);
-		if (fbRewardedVideoAd != null) {
+		if (null != fbRewardedVideoAd) {
 			fbRewardedVideoAd.destroy();
 			fbRewardedVideoAd = null;
 		}
-		release();// 释放资源
+		if(null != admobRewardedVideoAd){
+			admobRewardedVideoAd.destroy(this.getContext());
+			admobRewardedVideoAd = null;
+		}
+		// 释放资源
+//		release();
 		//mMediaPlayer.stop();
 	}
 
@@ -242,10 +251,7 @@ public class MainView extends BaseView {
 				if (isPlay) {
 					isPlay = false;
 				} else {
-					isPlay = true;
-					synchronized (thread) {
-						thread.notify();
-					}
+					restartGame();
 				}
 				return true;
 			}
@@ -364,6 +370,11 @@ public class MainView extends BaseView {
 		boom = BitmapFactory.decodeResource(getResources(), R.drawable.boom);
 		plane_shield = BitmapFactory.decodeResource(getResources(), R.drawable.plane_shield);
 
+
+
+	}
+
+	public void initSize(){
 		scalex = screen_width / background.getWidth();
 		scaley = screen_height / background.getHeight();
 		play_bt_w = playButton.getWidth();
@@ -371,7 +382,6 @@ public class MainView extends BaseView {
 		bg_y = 0;
 		bg_y2 = bg_y - screen_height;
 		missile_bt_y = screen_height - 10 - missile_bt.getHeight();
-
 	}
 
 	// 初始化游戏对象
@@ -750,7 +760,7 @@ public class MainView extends BaseView {
 	public void setDelayCountDownHandler(){
 		//倒计时显示
 		countView = popupWindow.getContentView().findViewById(R.id.timer);
-		Message message = new Message();
+		Message message = Message.obtain();
 		message.arg1 = 0;
 		message.arg2 = 1;
 		message.what = ConstantUtil.RESURRECTION_COUNT;
@@ -765,7 +775,7 @@ public class MainView extends BaseView {
 			popupWindow.dismiss();
 		}
 		//擦除计数
-		countView.setText("");
+		countView.setText("5");
 
 		//复活计数重新初始化
 		initTimer = ConstantUtil.INIT_COUNT_TIMER;
@@ -775,8 +785,12 @@ public class MainView extends BaseView {
 
 		//设置游戏运行状态为运行状态
 		myPlane.setAlive(true);
-		isPlay = true;
 		mMediaPlayer.start();
+		restartGame();
+	}
+
+	public void restartGame(){
+		isPlay = true;
 		synchronized (thread) {
 			thread.notify();
 		}
@@ -813,53 +827,6 @@ public class MainView extends BaseView {
 	// 播放音效
 	public void playSound(int key) {
 		sounds.playSound(key, 0);
-	}
-
-	// 线程运行的方法
-	@Override
-	public void run() {
-		while (threadFlag) {
-			long startTime = System.currentTimeMillis();
-
-			Message message = new Message();
-			message.arg1 = 2;
-			message.arg2 = 3;
-			message.what = ConstantUtil.RUNNING_GAME;
-			mCountDownHandler.sendMessage(message);
-
-			long endTime = System.currentTimeMillis();
-			if (!isPlay) {
-				mMediaPlayer.pause();// 音乐暂停
-
-				synchronized (thread) {
-					try {
-						thread.wait();
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-			} else {
-				if (!mMediaPlayer.isPlaying()) {
-					mMediaPlayer.start();
-				}
-			}
-
-			try {
-				if (endTime - startTime < 100)
-					Thread.sleep(100 - (endTime - startTime));
-			} catch (InterruptedException err) {
-				err.printStackTrace();
-			}
-		}
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		Message message = new Message();
-		message.what = ConstantUtil.TO_END_VIEW;
-		message.arg1 = Integer.valueOf(sumScore);
-		mainActivity.getHandler().sendMessage(message);
 	}
 
 }

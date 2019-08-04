@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.KeyEvent;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -50,19 +52,27 @@ public class  MainActivity extends Activity {
         sounds.initGameSound();
 
         readyView = new ReadyView(this, sounds);
-        setContentView(readyView);
+//        setContentView(readyView);
+        ViewGroup decorView = (ViewGroup) getWindow().getDecorView();
+        decorView.removeAllViews();
+        decorView.addView(readyView);
     }
 
     /**
      * 进入游戏界面
      */
     public void toMainView() {
+        ViewGroup decorView = (ViewGroup) getWindow().getDecorView();
+        decorView.removeAllViews();
         if (mainView == null) {
             mainView = new MainView(this, sounds);
         }
-        setContentView(mainView);
-        readyView = null;
-        endView = null;
+        mainView.restartGame();
+        decorView.addView(mainView);
+//        setContentView(mainView);
+
+//        readyView = null;
+//        endView = null;
     }
 
     /**
@@ -71,12 +81,15 @@ public class  MainActivity extends Activity {
      * @param score
      */
     public void toEndView(int score) {
+        ViewGroup decorView = (ViewGroup) getWindow().getDecorView();
+        decorView.removeAllViews();
         if (endView == null) {
             endView = new EndView(this, sounds);
             endView.setScore(score);
         }
-        setContentView(endView);
-        mainView = null;
+        decorView.addView(endView);
+//        setContentView(endView);
+//        mainView = null;
     }
 
     /**
@@ -104,6 +117,9 @@ public class  MainActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if(mainView!=null){
+            mainView.release();
+        }
     }
 
 
@@ -137,5 +153,7 @@ public class  MainActivity extends Activity {
         super.onPause();
         IronSource.onPause(this);
     }
+
+
 
 }

@@ -6,8 +6,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
-import com.fungames.galaxyshooter.R;
-
 /**
  * 游戏物品
  */

@@ -32,7 +32,7 @@ public class IronSourceRewardedVideoListener implements RewardedVideoListener {
     @Override
     public void onRewardedVideoAdClosed() {
         Log.d(TAG, "Rewarded video ad closed!");
-        Message message = new Message();
+        Message message = Message.obtain();
         message.arg1 = 4;
         message.arg2 = 5;
         message.what = ConstantUtil.POPUP_DISMISS;
@@ -64,7 +64,7 @@ public class IronSourceRewardedVideoListener implements RewardedVideoListener {
     @Override
     public void onRewardedVideoAdShowFailed(IronSourceError ironSourceError) {
         Log.d(TAG, "Rewarded video ad error:" + ironSourceError.getErrorMessage());
-        Message message = new Message();
+        Message message = Message.obtain();
         message.arg1 = 4;
         message.arg2 = 5;
         message.what = ConstantUtil.POPUP_DISMISS;

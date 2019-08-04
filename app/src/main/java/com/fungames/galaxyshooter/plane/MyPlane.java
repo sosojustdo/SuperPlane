@@ -252,7 +252,7 @@ public class MyPlane extends GameObject implements IMyPlane {
                     bullets.add(bullet1);
                 }
             } else if (type == ConstantUtil.MYBULLET2) {
-                for (int i = 0; i < 4; i++) {
+                for (int i = 0; i < 6; i++) {
                     MyRedBullet bullet2 = (MyRedBullet) factory
                             .createMyRedBullet(resources);
                     bullets.add(bullet2);
@@ -260,7 +260,7 @@ public class MyPlane extends GameObject implements IMyPlane {
             }
 
         } else {
-            for (int i = 0; i < 4; i++) {
+            for (int i = 0; i < 8; i++) {
                 MyBlueBullet bullet = (MyBlueBullet) factory.createMyBlueBullet(resources);
                 bullets.add(bullet);
             }

@@ -39,7 +39,7 @@ public class EndView extends BaseView {
         super(context, sounds);
         this.mainActivity = (MainActivity) context;
         rect = new Rect();
-        thread = new Thread(this);
+        //thread = new Thread(this);
     }
 
     @Override
@@ -51,12 +51,7 @@ public class EndView extends BaseView {
     public void surfaceCreated(SurfaceHolder arg0) {
         super.surfaceCreated(arg0);
         initBitmap();
-        if (thread.isAlive()) {
-            //thread.start();
-        } else {
-            thread = new Thread(this);
-            thread.start();
-        }
+        drawSelf();
     }
 
     @Override
@@ -177,21 +172,6 @@ public class EndView extends BaseView {
         } finally {
             if (canvas != null)
                 sfh.unlockCanvasAndPost(canvas);
-        }
-    }
-
-    @Override
-    public void run() {
-        while (threadFlag) {
-            long startTime = System.currentTimeMillis();
-            drawSelf();
-            long endTime = System.currentTimeMillis();
-            try {
-                if (endTime - startTime < 400)
-                    Thread.sleep(400 - (endTime - startTime));
-            } catch (InterruptedException err) {
-                err.printStackTrace();
-            }
         }
     }
 

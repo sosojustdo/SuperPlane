@@ -22,7 +22,7 @@ public class GameSoundPool {
     public GameSoundPool(MainActivity mainActivity) {
         this.mainActivity = mainActivity;
         map = new HashMap<Integer, Integer>();
-        soundPool = new SoundPool(8, AudioManager.STREAM_MUSIC, 0);
+        soundPool = new SoundPool(3, AudioManager.STREAM_MUSIC, 0);
     }
 
     /**
@@ -36,6 +36,8 @@ public class GameSoundPool {
         map.put(5, soundPool.load(mainActivity, R.raw.bigexplosion, 1));
         map.put(6, soundPool.load(mainActivity, R.raw.get_goods, 1));
         map.put(7, soundPool.load(mainActivity, R.raw.button, 1));
+//        map.put(8, soundPool.load(mainActivity, R.raw.game, 1));
+
     }
 
     /**

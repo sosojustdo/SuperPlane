@@ -8,7 +8,7 @@ public interface AdConfigConstant {
 
     public final static String FACEBOOK_PLACEMENT_ID = "636703710139914_636706510139634";
 
-    public final static String ADMOB_ID = "ca-app-pub-4022320816288768~1855222207";
+    public final static String ADMOB_UNIT_ID = "ca-app-pub-4022320816288768/9586528095";
 
     public final static String IRON_SOURCE_APPKEY = "9a0de58d";
 

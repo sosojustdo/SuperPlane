@@ -89,7 +89,7 @@ public class  MainActivity extends Activity {
         }
         decorView.addView(endView);
 //        setContentView(endView);
-//        mainView = null;
+        mainView = null;
     }
 
     /**

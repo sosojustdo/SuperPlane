@@ -7,9 +7,6 @@ import com.fungames.galaxyshooter.constant.AdConfigConstant;
 import com.fungames.galaxyshooter.constant.ConstantUtil;
 import com.fungames.galaxyshooter.view.MainView;
 import com.google.android.gms.ads.AdRequest;
-import com.ironsource.mediationsdk.IronSource;
-import com.vungle.warren.AdConfig;
-import com.vungle.warren.Vungle;
 
 /**
  * Created by daipeng on 2019/7/21.
@@ -36,6 +33,9 @@ public class BaseClickListener implements View.OnClickListener {
         //移除倒计时handler
         mainView.getmCountDownHandler().removeMessages(ConstantUtil.RESURRECTION_COUNT);
 
+
+
+        /**
         //show fb ads
         fbRewardedVideoAd.setAdListener(new FacebookRewardedVideoAdListener(fbRewardedVideoAd, mainView));
         //AdSettings.addTestDevice("2b29c369-3664-4c70-a5e9-7b1c0357cf76");
@@ -62,6 +62,7 @@ public class BaseClickListener implements View.OnClickListener {
         }else{
             mainView.adsRewardedVideoClosedHandler(true);
         }
+         **/
 
     }
 }

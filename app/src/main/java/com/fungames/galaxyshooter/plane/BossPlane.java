@@ -473,22 +473,23 @@ public class BossPlane extends EnemyPlane {
 
         if (bulletType == ConstantUtil.BOSSBULLET_DEFAULT) { // 普通状态
             normalShooting();
-        } else if (bulletType == ConstantUtil.BOSSBULLET_ANGER) { // 愤怒状态
+        }
+        /**
+        else if (bulletType == ConstantUtil.BOSSBULLET_ANGER) { // 愤怒状态
             angerShooting();
         } else if (bulletType == ConstantUtil.BOSSBULLET_CRAZY) { // 疯狂状态
             crazyShooting();
         } else if (bulletType == ConstantUtil.BOSSBULLET_LIMIT) { // 极限状态
             limitShooting();
-        } else { // 其他情况
+        } **/
+        else { // 其他情况
             for (int i = 0; i < 5; i++) {
                 // 生产普通子弹
                 BossFlameBullet bullet = (BossFlameBullet) factory
                         .createBossFlameBullet(resources);
                 bullets.add(bullet);
-
             }
         }
-
     }
 
     /**
